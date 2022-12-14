@@ -1,2 +1,44 @@
 # Py-AdventOfCode
+
+<https://adventofcode.com/>
+
+## Using
+<div align="center">
+  <a href="https://www.python.org/">
+    <img align="center" src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
+  </a>
+  <a href="https://www.jetbrains.com/fr-fr/pycharm/">
+    <img align="center" src="https://img.shields.io/badge/pycharm-143?style=for-the-badge&logo=pycharm&logoColor=black&color=black&labelColor=green" />
+  </a>
+</div>
  
+
+## Events
+
+<!--
+- [[2022]](2022/README.md) 0:star2:
+- [[2021]](2021/README.md) 0:star2:
+- [[2020]](2020/README.md) 0:star2:
+- [[2019]](2019/README.md) 0:star2:
+- [[2018]](2018/README.md) 0:star2:
+- [[2017]](2017/README.md) 0:star2:
+- [[2016]](2016/README.md) 0:star2:
+-->
+- [[2015]](2015/README.md) 50:star2:
+
+Total stars: 50:star2:
+
+## Python imports
+
+### Native
+
+- hashlib (MD5)
+- itertools (permutations)
+- json
+- re (regex)
+- string (ascii_lowercase)
+- time
+
+### Requirement
+
+- numpy (array manipulations, uint16)
