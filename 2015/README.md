@@ -50,13 +50,13 @@
 
 ### Native
 
-- hashlib (MD5)
-- itertools (permutations)
-- json
-- re (regex)
-- string (ascii_lowercase)
-- time
+- `hashlib` (`md5`)
+- `itertools` (`combinations`, `permutations`)
+- `json`
+- `re` (`compile`, `findall`, `search`)
+- `string` (`ascii_lowercase`)
+- `time`
 
 ### Requirement
 
-- numpy (array manipulations, uint16)
+- `numpy` (`add`, `count_nonzero`, `full`, `ndarray`, `prod`, `sum`, `uint16`, `zeros`)
