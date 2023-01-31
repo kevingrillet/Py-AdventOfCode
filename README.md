@@ -16,29 +16,31 @@
 ## Events
 
 <!--
-- [[2022]](2022/README.md) 0:star2:
-- [[2021]](2021/README.md) 0:star2:
-- [[2020]](2020/README.md) 0:star2:
-- [[2019]](2019/README.md) 0:star2:
-- [[2018]](2018/README.md) 0:star2:
-- [[2017]](2017/README.md) 0:star2:
-- [[2016]](2016/README.md) 0:star2:
+- [[2022]](2022) 0:star2:
+- [[2021]](2021) 0:star2:
+- [[2020]](2020) 0:star2:
+- [[2019]](2019) 0:star2:
+- [[2018]](2018) 0:star2:
+- [[2017]](2017) 0:star2:
 -->
-- [[2015]](2015/README.md) 50:star2:
+- [[2016]](2016) 44:star2:
+- [[2015]](2015) 50:star2:
 
-Total stars: 50:star2:
+Total stars: 98:star2:
 
 ## Python imports
 
 ### Native
 
-- hashlib (MD5)
-- itertools (permutations)
-- json
-- re (regex)
-- string (ascii_lowercase)
-- time
+- `collections` (`defaultdict`, `deque`)
+- `hashlib` (`md5`)
+- `itertools` (`combinations`, `permutations`)
+- `json`
+- `re` (`compile`, `findall`, `search`)
+- `string` (`ascii_lowercase`)
+- `subprocess`
+- `time`
 
 ### Requirement
 
-- numpy (array manipulations, uint16)
+- `numpy` (`add`, `count_nonzero`, `full`, `ndarray`, `prod`, `roll`, `sum`, `uint16`, `zeros`)
