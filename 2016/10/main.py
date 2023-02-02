@@ -69,7 +69,7 @@ def part_two(inpt: list[str]) -> int:
         _send_to(low_l, bots, low_v, todos, output=output)
         _send_to(high_l, bots, high_v, todos, output=output)
 
-    return output['0'][0]*output['1'][0]*output['2'][0]
+    return output['0'][0] * output['1'][0] * output['2'][0]
 
 
 if __name__ == '__main__':

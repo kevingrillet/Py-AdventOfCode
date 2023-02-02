@@ -18,7 +18,7 @@ def part_one(inpt: str) -> str:
         return inpt
     sub, times = map(int, reg_found.groups())
     start = reg_found.start() + len(reg_found.group())
-    return inpt[:reg_found.start()] + times * inpt[start:start+sub] + part_one(inpt[start + sub:])
+    return inpt[:reg_found.start()] + times * inpt[start:start + sub] + part_one(inpt[start + sub:])
 
 
 def part_two(inpt: str) -> str:
@@ -28,7 +28,7 @@ def part_two(inpt: str) -> str:
         return inpt
     sub, times = map(int, reg_found.groups())
     start = reg_found.start() + len(reg_found.group())
-    return inpt[:reg_found.start()] + times * part_two(inpt[start:start+sub]) + part_two(inpt[start + sub:])
+    return inpt[:reg_found.start()] + times * part_two(inpt[start:start + sub]) + part_two(inpt[start + sub:])
 
 
 if __name__ == '__main__':

@@ -28,9 +28,9 @@ def part_two(inpt: int) -> int:
         # elves = np.roll(np.delete(elves, (nb // 2)), -1)
         middle = nb // 2
         if nb % 2:
-            elves = np.roll(np.roll(elves, -middle)[1::3], middle - (nb - (nb+1)//3))
+            elves = np.roll(np.roll(elves, -middle)[1::3], middle - (nb - (nb + 1) // 3))
         else:
-            elves = np.roll(np.roll(elves, -middle)[2::3], middle - (nb - nb//3))
+            elves = np.roll(np.roll(elves, -middle)[2::3], middle - (nb - nb // 3))
 
 
 if __name__ == '__main__':

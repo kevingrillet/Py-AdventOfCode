@@ -21,7 +21,7 @@ def run(inpt: str, fill: int) -> str:
         tmp = ''
         i = 0
         while i < len(data) - 1:
-            if data[i] == data[i+1]:
+            if data[i] == data[i + 1]:
                 tmp += '1'
             else:
                 tmp += '0'

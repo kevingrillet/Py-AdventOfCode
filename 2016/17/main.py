@@ -18,7 +18,7 @@ def run(inpt: str) -> (str, int):
             solutions.append(path)
             continue
 
-        u, d, l, r = md5((inpt+path).encode()).hexdigest()[:4]
+        u, d, l, r = md5((inpt + path).encode()).hexdigest()[:4]
         if u > 'a' and pos[1] > 0:
             rooms.append(((pos[0], pos[1] - 1), path + 'U'))
         if d > 'a' and pos[1] < 3:

@@ -7,7 +7,7 @@ def get_input(filename: str) -> list[str]:
 
 
 def manhattan(a: (int, int), b: (int, int)):
-    return sum(abs(val1-val2) for val1, val2 in zip(a, b))
+    return sum(abs(val1 - val2) for val1, val2 in zip(a, b))
 
 
 def part_one(inpt: list[str]) -> int:
@@ -61,7 +61,7 @@ def part_two(inpt: list[str]) -> int:
     goal = (0, grid[0].index('G'))
 
     if node and pb:
-        p1 = (pb[0], pb[1]-1)
+        p1 = (pb[0], pb[1] - 1)
         steps += manhattan(node, p1)
         steps += manhattan(p1, goal)
         steps += 5 * (goal[1] - 1)

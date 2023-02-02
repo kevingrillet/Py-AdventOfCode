@@ -16,7 +16,7 @@ def part_one(inpt: str) -> int:
         found = False
         for a, b, c in zip(hex_value, hex_value[1:], hex_value[2:]):
             if a == b == c:
-                if 5*a in hex_value:
+                if 5 * a in hex_value:
                     for key, value in triplets.items():
                         if a == value and key < index <= key + 1000:
                             keys.add(key)
@@ -41,7 +41,7 @@ def part_two(inpt: str) -> int:
         found = False
         for a, b, c in zip(hex_value, hex_value[1:], hex_value[2:]):
             if a == b == c:
-                if 5*a in hex_value:
+                if 5 * a in hex_value:
                     for key, value in triplets.items():
                         if a == value and key < index <= key + 1000:
                             keys.add(key)

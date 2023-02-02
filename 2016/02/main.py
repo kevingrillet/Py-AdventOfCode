@@ -5,9 +5,9 @@ def get_input(filename: str) -> list[str]:
 
 
 keypad = [
-         ['1', '2', '3'],
-         ['4', '5', '6'],
-         ['7', '8', '9'],
+    ['1', '2', '3'],
+    ['4', '5', '6'],
+    ['7', '8', '9'],
 ]
 
 
@@ -35,11 +35,11 @@ def part_one(inpt: list[str]) -> str:
 
 
 keypad2 = [
-         ['', '',   '1', '',   ''],
-         ['',  '2', '3', '4',  ''],
-         ['5', '6', '7', '8', '9'],
-         ['',  'A', 'B', 'C',  ''],
-         ['',   '', 'D',  '',  ''],
+    ['', '', '1', '', ''],
+    ['', '2', '3', '4', ''],
+    ['5', '6', '7', '8', '9'],
+    ['', 'A', 'B', 'C', ''],
+    ['', '', 'D', '', ''],
 ]
 
 
@@ -58,7 +58,7 @@ def part_two(inpt: list[str]) -> str:
             elif move == 'R':
                 new_pos = [pos[0], pos[1] + 1]
 
-            if -1 < new_pos[0] < len(keypad2) and -1 < new_pos[1] < len(keypad2[0])\
+            if -1 < new_pos[0] < len(keypad2) and -1 < new_pos[1] < len(keypad2[0]) \
                     and keypad2[new_pos[0]][new_pos[1]] != '':
                 pos = new_pos
 

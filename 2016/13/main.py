@@ -7,7 +7,7 @@ def get_input(filename: str) -> str:
 
 
 def fct(x, y, inpt):
-    return bin(x*x + 3*x + 2*x*y + y + y*y + inpt).count('1') % 2
+    return bin(x * x + 3 * x + 2 * x * y + y + y * y + inpt).count('1') % 2
 
 
 def part_one(inpt: int) -> int:
@@ -23,7 +23,7 @@ def part_one(inpt: int) -> int:
             return steps
 
         for dx, dy in adjacent:
-            xx, yy = (x+dx, y+dy)
+            xx, yy = (x + dx, y + dy)
             if not ((xx, yy) in done or xx < 0 or yy < 0 or fct(xx, yy, inpt)):
                 stack.append(((xx, yy), steps + 1))
 
@@ -42,7 +42,7 @@ def part_two(inpt: int) -> int:
         done.add((x, y))
 
         for dx, dy in adjacent:
-            xx, yy = (x+dx, y+dy)
+            xx, yy = (x + dx, y + dy)
             if not ((xx, yy) in done or xx < 0 or yy < 0 or fct(xx, yy, inpt)):
                 stack.append(((xx, yy), steps + 1))
 

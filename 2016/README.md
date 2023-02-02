@@ -47,7 +47,6 @@
 - Day 23 = Part 2 just don't want to work :/
 - Day 25 ~= Day 23
 
-
 ## Python imports :books:
 
 ### Native

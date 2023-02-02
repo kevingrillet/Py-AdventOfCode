@@ -10,8 +10,8 @@ def run(inpt: str, max_row: int) -> int:
         safe += row.count('.')
         old = '.' + row + '.'
         row = ''
-        for x in range(len(old)-2):
-            row += '^' if old[x] != old[x+2] else '.'
+        for x in range(len(old) - 2):
+            row += '^' if old[x] != old[x + 2] else '.'
     return safe
 
 
