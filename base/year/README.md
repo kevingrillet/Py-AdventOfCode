@@ -40,13 +40,3 @@
 |     25      | [](<https://adventofcode.com/XXXX/day/25>) |             |                  |
 
 ### Comments
-
-## Python imports :books:
-
-### Native
-
--
-
-### Requirement
-
--

@@ -26,21 +26,4 @@
 - [[2016]](2016) 44:star2:
 - [[2015]](2015) 50:star2:
 
-Total stars: 98:star2:
-
-## Python imports
-
-### Native
-
-- `collections` (`defaultdict`, `deque`)
-- `hashlib` (`md5`)
-- `itertools` (`combinations`, `permutations`)
-- `json`
-- `re` (`compile`, `findall`, `search`)
-- `string` (`ascii_lowercase`)
-- `subprocess`
-- `time`
-
-### Requirement
-
-- `numpy` (`add`, `count_nonzero`, `full`, `ndarray`, `prod`, `roll`, `sum`, `uint16`, `zeros`)
+Total stars: 94:star2:
