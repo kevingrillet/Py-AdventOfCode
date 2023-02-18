@@ -8,8 +8,9 @@ from markdownify import markdownify
 
 import config
 
-NEW = '2017'
 COOKIES = {'session': config.SESSION}
+FORCE = False
+NEW = '2017'
 
 
 def add_day_input(year: str, d: int) -> None:
@@ -46,7 +47,7 @@ def add_day_readme(year: str, d: int) -> None:
     :return:
     """
     day = "{:02d}".format(d)
-    if os.path.isfile(f'../{year}/{day}/README.md'):
+    if os.path.isfile(f'../{year}/{day}/README.md') and not FORCE:
         with open(f'../{year}/{day}/README.md') as f:
             for line in f:
                 if bool(re.search(r'Part Two', line)):
@@ -57,6 +58,19 @@ def add_day_readme(year: str, d: int) -> None:
     if rq.status_code == 200:
         soup = BeautifulSoup(rq.content, 'html.parser')
         data = markdownify(str(soup.find('main')), heading_style="ATX")
+        # Clean the data!
+        data = data.replace(r'article \*[title]{border-bottom:1px dotted #ffff66;}', '')
+        data = re.sub(r'At this point, all that is left is for you to \[admire your Advent calendar]\(/\d+\)\.',
+                      '', data)
+        data = re.sub(r'At this point, you should \[return to your Advent calendar]\(/\d+\) and try another puzzle\.',
+                      '', data)
+        data = re.sub(r'If you still want to see it, you can \[get your puzzle input]\(\d+/input\)\.', '', data)
+        data = re.sub(r'You can also \[Shareon', '', data)
+        data = re.sub(r'You can \[Shareon', '', data)
+        data = re.sub(r' \[Twitter]\(.*\)', '', data)
+        data = re.sub(r'\[Mastodon]\(javascript:void\(0\);\)] this puzzle\.', '', data)
+        data = re.sub(r'\n\s*\n', '\n\n', data)
+        # Save
         file = open(f'../{year}/{day}/README.md', 'w')
         file.write(data)
         file.close()
