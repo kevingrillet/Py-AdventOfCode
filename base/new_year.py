@@ -4,6 +4,7 @@ import shutil
 
 import requests
 from bs4 import BeautifulSoup
+from markdownify import markdownify
 
 import config
 
@@ -37,6 +38,32 @@ def add_day_input(year: str, d: int) -> None:
         raise NameError(f'requests.get({url}/input, cookies=COOKIES) responded with a status of: {rq.status_code}.')
 
 
+def add_day_readme(year: str, d: int) -> None:
+    """
+    Query description of specify year & day.
+    :param year: wanted year
+    :param d: wanted day (not formated on 2 characters)
+    :return:
+    """
+    day = "{:02d}".format(d)
+    if os.path.isfile(f'../{year}/{day}/README.md'):
+        with open(f'../{year}/{day}/README.md') as f:
+            for line in f:
+                if bool(re.search(r'Part Two', line)):
+                    return
+
+    url = f'https://adventofcode.com/{year}/day/{d}'
+    rq = requests.get(url, cookies=COOKIES)
+    if rq.status_code == 200:
+        soup = BeautifulSoup(rq.content, 'html.parser')
+        data = markdownify(str(soup.find('main')), heading_style="ATX")
+        file = open(f'../{year}/{day}/README.md', 'w')
+        file.write(data)
+        file.close()
+    else:
+        print(f'requests.get({url}) responded with a status of: {rq.status_code}.')
+
+
 def add_title_readme(year: str) -> None:
     """
     Query the title of every day available and add them to the README.md.
@@ -54,7 +81,7 @@ def add_title_readme(year: str) -> None:
         days_to_add = []
         for day in days:
             url = f'https://adventofcode.com/{year}/day/{day}'
-            rq = requests.get(url)
+            rq = requests.get(url, cookies=COOKIES)
             if rq.status_code == 200:
                 soup = BeautifulSoup(rq.content, 'html.parser')
                 title = ' '.join(soup.find('h2').get_text().split()[3:-1])
@@ -79,6 +106,7 @@ def create_new_day(year: str, d: int) -> None:
     if not os.path.exists(f'../{year}/{day}'):
         shutil.copytree('./day/', f'../{year}/{day}')
     add_day_input(year, d)
+    add_day_readme(year, d)
 
 
 def create_new_days(year: str) -> None:

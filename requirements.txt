@@ -1,3 +1,5 @@
 bs4
+markdownify
 numpy
 requests
+beautifulsoup4
