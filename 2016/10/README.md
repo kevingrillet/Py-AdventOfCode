@@ -1,4 +1,3 @@
-
 ## --- Day 10: Balance Bots ---
 
 You come upon a factory in which many robots are [zooming around](https://www.youtube.com/watch?v=JnkMyfQ5YfY&t=40) handing small microchips to each other.

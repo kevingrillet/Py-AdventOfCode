@@ -58,6 +58,7 @@ def add_day_readme(year: str, d: int) -> None:
     if rq.status_code == 200:
         soup = BeautifulSoup(rq.content, 'html.parser')
         data = markdownify(str(soup.find('main')), heading_style="ATX")
+
         # Clean the data!
         data = data.replace(r'article \*[title]{border-bottom:1px dotted #ffff66;}', '')
         data = re.sub(r'At this point, all that is left is for you to \[admire your Advent calendar]\(/\d+\)\.',
@@ -70,6 +71,13 @@ def add_day_readme(year: str, d: int) -> None:
         data = re.sub(r' \[Twitter]\(.*\)', '', data)
         data = re.sub(r'\[Mastodon]\(javascript:void\(0\);\)] this puzzle\.', '', data)
         data = re.sub(r'\n\s*\n', '\n\n', data)
+
+        # Remove first line if empty
+        lines = data.split('\n')
+        if not lines[0].strip():
+            lines = lines[1:]
+        data = '\n'.join(lines)
+
         # Save
         file = open(f'../{year}/{day}/README.md', 'w')
         file.write(data)

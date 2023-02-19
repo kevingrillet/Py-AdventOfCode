@@ -1,4 +1,3 @@
-
 ## --- Day 20: Firewall Rules ---
 
 You'd like to set up a small hidden computer here so you can use it to get back into the network later. However, the corporate firewall only allows communication with certain external [IP addresses](https://en.wikipedia.org/wiki/IPv4#Addressing).
