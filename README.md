@@ -11,16 +11,10 @@
     <img align="center" src="https://img.shields.io/badge/pycharm-143?style=for-the-badge&logo=pycharm&logoColor=black&color=black&labelColor=green" />
   </a>
 </div>
- 
 
 ## Events
 
 <!--
-- [[2022]](2022) 0:star2:
-- [[2021]](2021) 0:star2:
-- [[2020]](2020) 0:star2:
-- [[2019]](2019) 0:star2:
-- [[2018]](2018) 0:star2:
 - [[2017]](2017) 0:star2:
 -->
 - [[2016]](2016) 44:star2:

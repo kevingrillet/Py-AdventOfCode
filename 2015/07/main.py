@@ -8,9 +8,9 @@ def get_input(filename: str) -> list[str]:
         return [line.strip() for line in f.readlines()]
 
 
-regex_provide = re.compile(r'(\w+) -> (\w+)')
-regex_gates = re.compile(r'(\w+) (AND|OR|LSHIFT|RSHIFT) (\w+) -> (\w+)')
-regex_complement = re.compile(r'NOT (\w+) -> (\w+)')
+regex_provide = re.compile(r"(\w+) -> (\w+)")
+regex_gates = re.compile(r"(\w+) (AND|OR|LSHIFT|RSHIFT) (\w+) -> (\w+)")
+regex_complement = re.compile(r"NOT (\w+) -> (\w+)")
 
 
 def compute(wires: dict, ins: str):
@@ -32,13 +32,13 @@ def compute(wires: dict, ins: str):
         a = int(a)
         b = int(b)
 
-        if operator == 'AND':
+        if operator == "AND":
             value = a & b
-        elif operator == 'OR':
+        elif operator == "OR":
             value = a | b
-        elif operator == 'LSHIFT':
+        elif operator == "LSHIFT":
             value = a << b
-        elif operator == 'RSHIFT':
+        elif operator == "RSHIFT":
             value = a >> b
 
     elif regex_provide.search(ins):
@@ -69,13 +69,13 @@ def part_one(inpt: list[str]) -> dict:
 
 def part_two(inpt: list[str], input_wires: dict) -> dict:
     instructions = inpt.copy()
-    regex_target = re.compile(r'-> (\w+)')
-    wires = {'b': input_wires['a']}
+    regex_target = re.compile(r"-> (\w+)")
+    wires = {"b": input_wires["a"]}
 
     while instructions:
         for instruction in instructions:
             try:
-                if regex_target.search(instruction).group(1) != 'b':
+                if regex_target.search(instruction).group(1) != "b":
                     compute(wires=wires, ins=instruction)
                 instructions.remove(instruction)
             except KeyError:
@@ -85,11 +85,11 @@ def part_two(inpt: list[str], input_wires: dict) -> dict:
     return dict(sorted(wires.items()))
 
 
-if __name__ == '__main__':
-    input_string = get_input(filename='example')
-    print(f'Example: {part_one(inpt=input_string)}')
+if __name__ == "__main__":
+    input_string = get_input(filename="example")
+    print(f"Example: {part_one(inpt=input_string)}")
 
-    input_string = get_input(filename='input')
+    input_string = get_input(filename="input")
     wires_one = part_one(inpt=input_string)
     # print(f'Part one: {wires_one}')
     print(f'Part one: {wires_one["a"]}')

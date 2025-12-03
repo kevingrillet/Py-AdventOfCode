@@ -12,12 +12,12 @@ def say(look: str) -> str:
         if look[pos] == look[pos + 1]:
             cpt += 1
         else:
-            output += '{}{}'.format(cpt, look[pos])
+            output += "{}{}".format(cpt, look[pos])
             cpt = 1
         pos += 1
 
     if look[-1] != look[-2]:
-        output += '{}{}'.format('1', look[-1])
+        output += "{}{}".format("1", look[-1])
 
     return output
 
@@ -32,7 +32,7 @@ def process(inpt: str, times: int) -> str:
     return look
 
 
-if __name__ == '__main__':
-    input_string = get_input(filename='input')
-    print(f'Part one: {len(process(inpt=input_string, times=40))}')
-    print(f'Part two: {len(process(inpt=input_string, times=50))}')
+if __name__ == "__main__":
+    input_string = get_input(filename="input")
+    print(f"Part one: {len(process(inpt=input_string, times=40))}")
+    print(f"Part two: {len(process(inpt=input_string, times=50))}")

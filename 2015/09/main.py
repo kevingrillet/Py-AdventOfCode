@@ -7,8 +7,8 @@ def get_input(filename: str) -> list[str]:
         return [line.strip() for line in f.readlines()]
 
 
-def process(inpt: list[str]) -> (int, int):
-    regex_distances = re.compile(r'(\w*) to (\w*) = (\d*)')
+def process(inpt: list[str]) -> tuple[int, int]:
+    regex_distances = re.compile(r"(\w*) to (\w*) = (\d*)")
     routes = inpt.copy()
     places = set()
 
@@ -29,8 +29,8 @@ def process(inpt: list[str]) -> (int, int):
             place_start = permutation[step]
             place_destination = permutation[step + 1]
 
-            regex_from_to = re.compile(r'{} to {} = (\d*)'.format(place_start, place_destination))
-            regex_to_from = re.compile(r'{} to {} = (\d*)'.format(place_destination, place_start))
+            regex_from_to = re.compile(r"{} to {} = (\d*)".format(place_start, place_destination))
+            regex_to_from = re.compile(r"{} to {} = (\d*)".format(place_destination, place_start))
 
             for route in routes:
                 if regex_from_to.search(route):
@@ -50,11 +50,11 @@ def process(inpt: list[str]) -> (int, int):
     return shortest, longest
 
 
-if __name__ == '__main__':
-    input_string = get_input(filename='example')
-    print(f'Example: {process(inpt=input_string)}')
+if __name__ == "__main__":
+    input_string = get_input(filename="example")
+    print(f"Example: {process(inpt=input_string)}")
 
-    input_string = get_input(filename='input')
+    input_string = get_input(filename="input")
     output = process(inpt=input_string)
-    print(f'Part one: {output[0]}')
-    print(f'Part two: {output[1]}')
+    print(f"Part one: {output[0]}")
+    print(f"Part two: {output[1]}")

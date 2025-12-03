@@ -86,11 +86,11 @@ def part_two(inpt: str) -> int:
             return door
 
 
-if __name__ == '__main__':
-    input_string = get_input(filename='input')
+if __name__ == "__main__":
+    input_string = get_input(filename="input")
     st = time.time()
-    print(f'Part one: {part_one(inpt=input_string, implementation=3)}')
-    print(f'Execution time: {time.time() - st} seconds')
+    print(f"Part one: {part_one(inpt=input_string, implementation=3)}")
+    print(f"Execution time: {time.time() - st} seconds")
     st = time.time()
-    print(f'Part two: {part_two(inpt=input_string)}')
-    print(f'Execution time: {time.time() - st} seconds')
+    print(f"Part two: {part_two(inpt=input_string)}")
+    print(f"Execution time: {time.time() - st} seconds")

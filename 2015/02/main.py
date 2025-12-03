@@ -6,11 +6,11 @@ def get_input(filename: str) -> list[str]:
         return [line.strip() for line in f.readlines()]
 
 
-def part_one(inpt) -> int:
+def part_one(inpt: list[str]) -> int:
     result = 0
     for line in inpt:
         sides = []
-        length, width, height = map(int, line.split('x'))
+        length, width, height = map(int, line.split("x"))
         sides.append(2 * length * width)
         sides.append(2 * width * height)
         sides.append(2 * height * length)
@@ -22,10 +22,10 @@ def part_one(inpt) -> int:
     return result
 
 
-def part_two(inpt) -> int:
+def part_two(inpt: list[str]) -> int:
     result = 0
     for line in inpt:
-        sides = sorted(map(int, line.split('x')))
+        sides = sorted(map(int, line.split("x")))
         # Wrap
         result += sides[0] * 2 + sides[1] * 2
         # Bow
@@ -33,7 +33,7 @@ def part_two(inpt) -> int:
     return result
 
 
-if __name__ == '__main__':
-    input_string = get_input(filename='input')
-    print(f'Part one: {part_one(inpt=input_string)}')
-    print(f'Part two: {part_two(inpt=input_string)}')
+if __name__ == "__main__":
+    input_string = get_input(filename="input")
+    print(f"Part one: {part_one(inpt=input_string)}")
+    print(f"Part two: {part_two(inpt=input_string)}")

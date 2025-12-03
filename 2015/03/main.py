@@ -6,17 +6,17 @@ def get_input(filename: str) -> str:
         return f.read().strip()
 
 
-def next_direction(dir_char: str) -> [int, int]:
-    if dir_char == '^':
+def next_direction(dir_char: str) -> list[int]:
+    if dir_char == "^":
         return [0, 1]
-    elif dir_char == 'v':
+    elif dir_char == "v":
         return [0, -1]
-    elif dir_char == '>':
+    elif dir_char == ">":
         return [1, 0]
-    elif dir_char == '<':
+    elif dir_char == "<":
         return [-1, 0]
     else:
-        raise ValueError('Unknow input')
+        raise ValueError("Unknow input")
 
 
 def part_one(inpt: str) -> int:
@@ -52,7 +52,7 @@ def part_two(inpt: str) -> int:
     return len(visited)
 
 
-if __name__ == '__main__':
-    input_string = get_input(filename='input')
-    print(f'Part one: {part_one(inpt=input_string)}')
-    print(f'Part two: {part_two(inpt=input_string)}')
+if __name__ == "__main__":
+    input_string = get_input(filename="input")
+    print(f"Part one: {part_one(inpt=input_string)}")
+    print(f"Part two: {part_two(inpt=input_string)}")

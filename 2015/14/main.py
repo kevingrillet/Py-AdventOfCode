@@ -1,5 +1,8 @@
 import re
 
+# Race duration in seconds
+RACE_DURATION = 2503
+
 
 def get_input(filename: str) -> list[str]:
     with open(filename, encoding="utf8") as f:
@@ -7,7 +10,7 @@ def get_input(filename: str) -> list[str]:
 
 
 def part_one(inpt: list[str], duration: int) -> int:
-    regex = re.compile(r'\w* can fly (\d*) km/s for (\d*) seconds, but then must rest for (\d*) seconds.')
+    regex = re.compile(r"\w* can fly (\d*) km/s for (\d*) seconds, but then must rest for (\d*) seconds.")
     result = 0
 
     for rein in inpt:
@@ -31,7 +34,7 @@ def part_one(inpt: list[str], duration: int) -> int:
 
 
 def part_two(inpt: list[str], duration: int) -> int:
-    regex = re.compile(r'(\w*) can fly (\d*) km/s for (\d*) seconds, but then must rest for (\d*) seconds.')
+    regex = re.compile(r"(\w*) can fly (\d*) km/s for (\d*) seconds, but then must rest for (\d*) seconds.")
     reindeers = {}
     track = []
 
@@ -62,7 +65,7 @@ def part_two(inpt: list[str], duration: int) -> int:
 
     for second in range(1, duration + 1):
         furthest = 0
-        leader = ''
+        leader = ""
         for reindeer in track:
             if reindeer[second] > furthest:
                 furthest = reindeer[second]
@@ -72,7 +75,7 @@ def part_two(inpt: list[str], duration: int) -> int:
     return max(reindeers.values())
 
 
-if __name__ == '__main__':
-    input_string = get_input(filename='input')
-    print(f'Part one: {part_one(inpt=input_string, duration=2503)}')
-    print(f'Part two: {part_two(inpt=input_string, duration=2503)}')
+if __name__ == "__main__":
+    input_string = get_input(filename="input")
+    print(f"Part one: {part_one(inpt=input_string, duration=RACE_DURATION)}")
+    print(f"Part two: {part_two(inpt=input_string, duration=RACE_DURATION)}")

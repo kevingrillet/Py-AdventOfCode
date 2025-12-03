@@ -1,4 +1,5 @@
 import re
+from collections.abc import Generator
 
 
 def get_input(filename: str) -> list[str]:
@@ -6,7 +7,7 @@ def get_input(filename: str) -> list[str]:
         return [line.strip() for line in f.readlines()]
 
 
-def generate_mixtures(number_of_ingredients: int, sum_teaspoons: int) -> [int]:
+def generate_mixtures(number_of_ingredients: int, sum_teaspoons: int) -> Generator[list[int], None, None]:
     for teaspoon in range(sum_teaspoons if number_of_ingredients == 1 else 0, sum_teaspoons + 1):
         difference = sum_teaspoons - teaspoon
         if number_of_ingredients - 1:
@@ -19,7 +20,8 @@ def generate_mixtures(number_of_ingredients: int, sum_teaspoons: int) -> [int]:
 def part_one(inpt: list[str]) -> int:
     result = 0
     regex = re.compile(
-        r'\w*: capacity ([0-9-]+), durability ([0-9-]+), flavor ([0-9-]+), texture ([0-9-]+), calories ([0-9-]+)')
+        r"\w*: capacity ([0-9-]+), durability ([0-9-]+), flavor ([0-9-]+), texture ([0-9-]+), calories ([0-9-]+)"
+    )
 
     stats = []
     for ingredient in inpt:
@@ -45,18 +47,18 @@ def part_one(inpt: list[str]) -> int:
     # Better solution :)
     for mix in list(generate_mixtures(len(stats), 100)):
         ingredient = 0
-        tc = td = tf = tt = 0
+        capacity = durability = flavor = texture = 0
         while ingredient < len(stats):
-            tc += mix[ingredient] * stats[ingredient][0]
-            td += mix[ingredient] * stats[ingredient][1]
-            tf += mix[ingredient] * stats[ingredient][2]
-            tt += mix[ingredient] * stats[ingredient][3]
+            capacity += mix[ingredient] * stats[ingredient][0]
+            durability += mix[ingredient] * stats[ingredient][1]
+            flavor += mix[ingredient] * stats[ingredient][2]
+            texture += mix[ingredient] * stats[ingredient][3]
             ingredient += 1
 
-        if tc <= 0 or td <= 0 or tf <= 0 or tt <= 0:
+        if capacity <= 0 or durability <= 0 or flavor <= 0 or texture <= 0:
             continue
 
-        score = tc * td * tf * tt
+        score = capacity * durability * flavor * texture
         if score > result:
             result = score
 
@@ -66,7 +68,8 @@ def part_one(inpt: list[str]) -> int:
 def part_two(inpt: list[str]) -> int:
     result = 0
     regex = re.compile(
-        r'\w*: capacity ([0-9-]+), durability ([0-9-]+), flavor ([0-9-]+), texture ([0-9-]+), calories ([0-9-]+)')
+        r"\w*: capacity ([0-9-]+), durability ([0-9-]+), flavor ([0-9-]+), texture ([0-9-]+), calories ([0-9-]+)"
+    )
 
     stats = []
     for ingredient in inpt:
@@ -74,32 +77,32 @@ def part_two(inpt: list[str]) -> int:
 
     for mix in list(generate_mixtures(len(stats), 100)):
         ingredient = 0
-        tc = td = tf = tt = c2 = 0
+        capacity = durability = flavor = texture = calories = 0
         while ingredient < len(stats):
-            tc += mix[ingredient] * stats[ingredient][0]
-            td += mix[ingredient] * stats[ingredient][1]
-            tf += mix[ingredient] * stats[ingredient][2]
-            tt += mix[ingredient] * stats[ingredient][3]
-            c2 += mix[ingredient] * stats[ingredient][4]
+            capacity += mix[ingredient] * stats[ingredient][0]
+            durability += mix[ingredient] * stats[ingredient][1]
+            flavor += mix[ingredient] * stats[ingredient][2]
+            texture += mix[ingredient] * stats[ingredient][3]
+            calories += mix[ingredient] * stats[ingredient][4]
             ingredient += 1
 
-        if tc <= 0 or td <= 0 or tf <= 0 or tt <= 0:
+        if capacity <= 0 or durability <= 0 or flavor <= 0 or texture <= 0:
             continue
 
-        if c2 != 500:
+        if calories != 500:
             continue
 
-        score = tc * td * tf * tt
+        score = capacity * durability * flavor * texture
         if score > result:
             result = score
 
     return result
 
 
-if __name__ == '__main__':
-    input_string = get_input(filename='example')
-    print(f'Example: {part_one(inpt=input_string)}')
+if __name__ == "__main__":
+    input_string = get_input(filename="example")
+    print(f"Example: {part_one(inpt=input_string)}")
 
-    input_string = get_input(filename='input')
-    print(f'Part one: {part_one(inpt=input_string)}')
-    print(f'Part two: {part_two(inpt=input_string)}')
+    input_string = get_input(filename="input")
+    print(f"Part one: {part_one(inpt=input_string)}")
+    print(f"Part two: {part_two(inpt=input_string)}")

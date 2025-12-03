@@ -43,8 +43,8 @@ def part_two(inpt: list[int]) -> int:
     return process(inpt, 4)
 
 
-if __name__ == '__main__':
-    input_string = get_input(filename='input')
+if __name__ == "__main__":
+    input_string = get_input(filename="input")
     input_int = list(map(int, input_string))
-    print(f'Part one: {part_one(inpt=input_int)}')
-    print(f'Part two: {part_two(inpt=input_int)}')
+    print(f"Part one: {part_one(inpt=input_int)}")
+    print(f"Part two: {part_two(inpt=input_int)}")

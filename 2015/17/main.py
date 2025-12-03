@@ -1,5 +1,8 @@
 import itertools
 
+# Total liters of eggnog to store
+EGGNOG_LITERS = 150
+
 
 def get_input(filename: str) -> list[str]:
     with open(filename, encoding="utf8") as f:
@@ -12,7 +15,7 @@ def part_one(inpt: list[str]) -> int:
     result = 0
     for nb in range(len(containers)):
         for combination in itertools.combinations(containers, nb):
-            if sum(combination) == 150:
+            if sum(combination) == EGGNOG_LITERS:
                 result += 1
 
     return result
@@ -24,7 +27,7 @@ def part_two(inpt: list[str]) -> int:
     result = 0
     for nb in range(len(containers)):
         for combination in itertools.combinations(containers, nb):
-            if sum(combination) == 150:
+            if sum(combination) == EGGNOG_LITERS:
                 result += 1
         if result != 0:
             break
@@ -32,7 +35,7 @@ def part_two(inpt: list[str]) -> int:
     return result
 
 
-if __name__ == '__main__':
-    input_string = get_input(filename='input')
-    print(f'Part one: {part_one(inpt=input_string)}')
-    print(f'Part two: {part_two(inpt=input_string)}')
+if __name__ == "__main__":
+    input_string = get_input(filename="input")
+    print(f"Part one: {part_one(inpt=input_string)}")
+    print(f"Part two: {part_two(inpt=input_string)}")
