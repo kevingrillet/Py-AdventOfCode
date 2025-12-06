@@ -5,17 +5,17 @@ def get_input(filename: str) -> list[str]:
 
 
 def part_one(inpt: list[str]) -> int:
-    pass
+    return 0
 
 
 def part_two(inpt: list[str]) -> int:
-    pass
+    return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # input_string = get_input(filename='example')
     # print(f'Example: {part_one(inpt=input_string)}')
 
-    input_string = get_input(filename='input')
-    print(f'Part one: {part_one(inpt=input_string)}')
-    print(f'Part two: {part_two(inpt=input_string)}')
+    input_string = get_input(filename="input")
+    print(f"Part one: {part_one(inpt=input_string)}")
+    print(f"Part two: {part_two(inpt=input_string)}")

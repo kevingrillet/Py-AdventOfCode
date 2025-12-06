@@ -7,7 +7,7 @@ def get_input(filename: str) -> list[str]:
 def part_one(inpt: list[str]) -> int:
     discs = []
     for line in inpt:
-        splt = line.split(' ')
+        splt = line.split(" ")
         discs.append([int(splt[3]), int(splt[-1][:-1])])
 
     time = 0
@@ -21,7 +21,7 @@ def part_one(inpt: list[str]) -> int:
 def part_two(inpt: list[str]) -> int:
     discs = []
     for line in inpt:
-        splt = line.split(' ')
+        splt = line.split(" ")
         discs.append([int(splt[3]), int(splt[-1][:-1])])
 
     discs.append([11, 0])
@@ -34,10 +34,10 @@ def part_two(inpt: list[str]) -> int:
         time += 1
 
 
-if __name__ == '__main__':
-    input_string = get_input(filename='example')
-    print(f'Example: {part_one(inpt=input_string)}')
+if __name__ == "__main__":
+    input_string = get_input(filename="example")
+    print(f"Example: {part_one(inpt=input_string)}")
 
-    input_string = get_input(filename='input')
-    print(f'Part one: {part_one(inpt=input_string)}')
-    print(f'Part two: {part_two(inpt=input_string)}')
+    input_string = get_input(filename="input")
+    print(f"Part one: {part_one(inpt=input_string)}")
+    print(f"Part two: {part_two(inpt=input_string)}")

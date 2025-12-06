@@ -6,21 +6,21 @@ def get_input(filename: str) -> str:
 def run(inpt: str, max_row: int) -> int:
     row = inpt
     safe = 0
-    for i in range(max_row):
-        safe += row.count('.')
-        old = '.' + row + '.'
-        row = ''
+    for _ in range(max_row):
+        safe += row.count(".")
+        old = "." + row + "."
+        row = ""
         for x in range(len(old) - 2):
-            row += '^' if old[x] != old[x + 2] else '.'
+            row += "^" if old[x] != old[x + 2] else "."
     return safe
 
 
-if __name__ == '__main__':
-    input_string = get_input(filename='example')
-    print(f'Example: {run(inpt=input_string, max_row=3)}')
-    input_string = get_input(filename='example2')
-    print(f'Example: {run(inpt=input_string, max_row=10)}')
+if __name__ == "__main__":
+    input_string = get_input(filename="example")
+    print(f"Example: {run(inpt=input_string, max_row=3)}")
+    input_string = get_input(filename="example2")
+    print(f"Example: {run(inpt=input_string, max_row=10)}")
 
-    input_string = get_input(filename='input')
-    print(f'Part one: {run(inpt=input_string, max_row=40)}')
-    print(f'Part two: {run(inpt=input_string, max_row=400000)}')
+    input_string = get_input(filename="input")
+    print(f"Part one: {run(inpt=input_string, max_row=40)}")
+    print(f"Part two: {run(inpt=input_string, max_row=400000)}")

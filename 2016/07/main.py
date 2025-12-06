@@ -15,23 +15,23 @@ def ababab(sup: str, hyp: str) -> bool:
 
 
 def part_one(inpt: list[str]) -> int:
-    lines = [re.split(r'\[|]', line) for line in inpt]
-    supernet = [' '.join(line[::2]) for line in lines]
-    hypernet = [' '.join(line[1::2]) for line in lines]
+    lines = [re.split(r"\[|]", line) for line in inpt]
+    supernet = [" ".join(line[::2]) for line in lines]
+    hypernet = [" ".join(line[1::2]) for line in lines]
     return sum(abba(sup) and not abba(hyp) for sup, hyp in zip(supernet, hypernet))
 
 
 def part_two(inpt: list[str]) -> int:
-    lines = [re.split(r'\[|]', line) for line in inpt]
-    supernet = [' '.join(line[::2]) for line in lines]
-    hypernet = [' '.join(line[1::2]) for line in lines]
+    lines = [re.split(r"\[|]", line) for line in inpt]
+    supernet = [" ".join(line[::2]) for line in lines]
+    hypernet = [" ".join(line[1::2]) for line in lines]
     return sum(ababab(sup, hyp) for sup, hyp in zip(supernet, hypernet))
 
 
-if __name__ == '__main__':
-    print(f'Example one:', part_one(inpt=get_input(filename='example')))
-    print(f'Example two:', part_two(inpt=get_input(filename='example2')))
+if __name__ == "__main__":
+    print("Example one:", part_one(inpt=get_input(filename="example")))
+    print("Example two:", part_two(inpt=get_input(filename="example2")))
 
-    input_string = get_input(filename='input')
-    print(f'Part one: {part_one(inpt=input_string)}')
-    print(f'Part two: {part_two(inpt=input_string)}')
+    input_string = get_input(filename="input")
+    print(f"Part one: {part_one(inpt=input_string)}")
+    print(f"Part two: {part_two(inpt=input_string)}")

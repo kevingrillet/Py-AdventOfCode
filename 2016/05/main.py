@@ -1,44 +1,56 @@
 import hashlib
 
+PASSWORD_LENGTH = 8
+
 
 def get_input(filename: str) -> str:
     with open(filename, encoding="utf8") as f:
         return f.read().strip()
 
 
-def part_one(inpt: str) -> str:
-    result = ''
+def find_passwords(inpt: str) -> tuple[str, str]:
+    """Find both passwords simultaneously to avoid redundant MD5 calculations."""
+    input_bytes = inpt.encode()
+    result_one = []
+    result_two = [""] * PASSWORD_LENGTH
+    found_two = 0
     cpt = 0
-    while len(result) < 8:
-        hash_md5 = hashlib.md5(f'{inpt}{cpt}'.encode('utf-8')).hexdigest()
-        if hash_md5.startswith('00000'):
-            result += hash_md5[5]
+
+    while len(result_one) < PASSWORD_LENGTH or found_two < PASSWORD_LENGTH:
+        hash_hex = hashlib.md5(input_bytes + str(cpt).encode()).hexdigest()
+        if hash_hex.startswith("00000"):
+            # Part one: just take the 6th character
+            if len(result_one) < PASSWORD_LENGTH:
+                result_one.append(hash_hex[5])
+
+            # Part two: use 6th character as position, 7th as value
+            if found_two < PASSWORD_LENGTH:
+                pos = hash_hex[5]
+                if pos.isnumeric():
+                    pos_int = int(pos)
+                    if pos_int < PASSWORD_LENGTH and result_two[pos_int] == "":
+                        result_two[pos_int] = hash_hex[6]
+                        found_two += 1
         cpt += 1
 
-    return result
+    return "".join(result_one), "".join(result_two)
+
+
+def part_one(inpt: str) -> str:
+    return find_passwords(inpt)[0]
 
 
 def part_two(inpt: str) -> str:
-    result = [''] * 8
-    cpt = 0
-    found = 0
-    while found < 8:
-        hash_md5 = hashlib.md5(f'{inpt}{cpt}'.encode('utf-8')).hexdigest()
-        if hash_md5.startswith('00000'):
-            pos = hash_md5[5]
-            if pos.isnumeric() and int(pos) < 8 and result[int(pos)] == '':
-                result[int(pos)] = hash_md5[6]
-                found += 1
-        cpt += 1
-
-    return ''.join(result)
+    return find_passwords(inpt)[1]
 
 
-if __name__ == '__main__':
-    input_string = get_input(filename='example')
-    print(f'Example one: {part_one(inpt=input_string)}')
-    print(f'Example two: {part_two(inpt=input_string)}')
+if __name__ == "__main__":
+    input_string = get_input(filename="example")
+    ex_one, ex_two = find_passwords(input_string)
+    print(f"Example one: {ex_one}")
+    print(f"Example two: {ex_two}")
 
-    input_string = get_input(filename='input')
-    print(f'Part one: {part_one(inpt=input_string)}')
-    print(f'Part two: {part_two(inpt=input_string)}')
+    input_string = get_input(filename="input")
+    res_one, res_two = find_passwords(input_string)
+    print(f"Part one: {res_one}")
+    print(f"Part two: {res_two}")

@@ -8,10 +8,10 @@ def get_input(filename: str) -> list[str]:
 
 def part_one(inpt: list[str]) -> int:
     result = 0
-    regex = re.compile(r'(\d+)')
+    regex = re.compile(r"(\d+)")
 
     for triangle in inpt:
-        a, b, c = sorted(list(map(int, regex.findall(triangle))))
+        a, b, c = sorted(map(int, regex.findall(triangle)))
         if a + b > c:
             result += 1
     return result
@@ -19,7 +19,7 @@ def part_one(inpt: list[str]) -> int:
 
 def part_two(inpt: list[str]) -> int:
     result = 0
-    regex = re.compile(r'(\d+)')
+    regex = re.compile(r"(\d+)")
 
     pos = 0
     while pos < len(inpt):
@@ -37,8 +37,8 @@ def part_two(inpt: list[str]) -> int:
     return result
 
 
-if __name__ == '__main__':
-    input_string = get_input(filename='input')
-    print(f'Part one: {part_one(inpt=input_string)}')
-    print(f'Example:', part_two(inpt=get_input(filename='example')))
-    print(f'Part two: {part_two(inpt=input_string)}')
+if __name__ == "__main__":
+    input_string = get_input(filename="input")
+    print(f"Part one: {part_one(inpt=input_string)}")
+    print("Example:", part_two(inpt=get_input(filename="example")))
+    print(f"Part two: {part_two(inpt=input_string)}")

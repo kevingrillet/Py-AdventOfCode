@@ -1,13 +1,15 @@
 from collections import deque
 
+MAX_STEPS = 50
 
-def get_input(filename: str) -> str:
+
+def get_input(filename: str) -> int:
     with open(filename, encoding="utf8") as f:
-        return f.read().strip()
+        return int(f.read().strip())
 
 
 def fct(x, y, inpt):
-    return bin(x * x + 3 * x + 2 * x * y + y + y * y + inpt).count('1') % 2
+    return bin(x * x + 3 * x + 2 * x * y + y + y * y + inpt).count("1") % 2
 
 
 def part_one(inpt: int) -> int:
@@ -27,6 +29,8 @@ def part_one(inpt: int) -> int:
             if not ((xx, yy) in done or xx < 0 or yy < 0 or fct(xx, yy, inpt)):
                 stack.append(((xx, yy), steps + 1))
 
+    return -1
+
 
 def part_two(inpt: int) -> int:
     adjacent = ((1, 0), (-1, 0), (0, 1), (0, -1))
@@ -36,7 +40,7 @@ def part_two(inpt: int) -> int:
     while stack:
         (x, y), steps = stack.popleft()
 
-        if steps > 50:
+        if steps > MAX_STEPS:
             return len(done)
 
         done.add((x, y))
@@ -46,8 +50,10 @@ def part_two(inpt: int) -> int:
             if not ((xx, yy) in done or xx < 0 or yy < 0 or fct(xx, yy, inpt)):
                 stack.append(((xx, yy), steps + 1))
 
+    return len(done)
 
-if __name__ == '__main__':
-    input_string = get_input(filename='input')
-    print(f'Part one: {part_one(inpt=int(input_string))}')
-    print(f'Part two: {part_two(inpt=int(input_string))}')
+
+if __name__ == "__main__":
+    input_string = get_input(filename="input")
+    print(f"Part one: {part_one(inpt=input_string)}")
+    print(f"Part two: {part_two(inpt=input_string)}")
