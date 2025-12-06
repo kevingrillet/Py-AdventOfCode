@@ -7,8 +7,11 @@
   <a href="https://www.python.org/">
     <img align="center" src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" />
   </a>
-  <a href="https://www.jetbrains.com/fr-fr/pycharm/">
-    <img align="center" src="https://img.shields.io/badge/pycharm-143?style=for-the-badge&logo=pycharm&logoColor=black&color=black&labelColor=green" />
+  <a href="https://code.visualstudio.com/">
+    <img align="center" src="https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=for-the-badge&logo=visual-studio-code&logoColor=white" />
+  </a>
+  <a href="https://github.com/features/copilot">
+    <img align="center" src="https://img.shields.io/badge/GitHub%20Copilot-000000?style=for-the-badge&logo=github&logoColor=white" />
   </a>
 </div>
 
