@@ -29,18 +29,18 @@ jobs:
           else
             CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
           fi
-          
+
           # If it's the first commit, compare with HEAD~1
           if [ -z "$CHANGED_FILES" ]; then
             CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD || git ls-files)
           fi
-          
+
           echo "Changed files:"
           echo "$CHANGED_FILES"
-          
+
           # Extract years from Python files that changed (e.g., 2015/01/main.py -> 2015)
-          YEARS=$(echo "$CHANGED_FILES" | grep '\.py$' | grep -E '^(2015|2016|2017)/' | cut -d'/' -f1 | sort -u | jq -R -s -c 'split("\n")[:-1]')
-          
+          YEARS=$(echo "$CHANGED_FILES" | grep '\.py$' | grep -E '^[0-9]{4}/' | cut -d'/' -f1 | sort -u | jq -R -s -c 'split("\n")[:-1]')
+
           if [ -z "$YEARS" ] || [ "$YEARS" == "[]" ]; then
             echo "No Python files changed in year directories"
             echo "years=[]" >> $GITHUB_OUTPUT
@@ -57,28 +57,28 @@ jobs:
       fail-fast: false
       matrix:
         year: ${{ fromJson(needs.detect-changes.outputs.years) }}
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
           cache: 'pip'
-      
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      
+
       - name: Test ${{ matrix.year }} solutions
         run: |
           cd ${{ matrix.year }}
           echo "Testing solutions for year ${{ matrix.year }}"
           python main.py
         timeout-minutes: 10
-      
+
       - name: Check execution status
         if: success()
         run: echo "✅ All solutions for ${{ matrix.year }} executed successfully"

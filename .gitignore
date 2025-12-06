@@ -1,5 +1,6 @@
 # Project
 .temp/
+.ruff_cache
 config.py
 
 # Byte-compiled / optimized / DLL files
