@@ -103,6 +103,13 @@ def add_day_readme(year: str, d: int) -> None:
         data = re.sub(r"\n\s*\n", "\n\n", data)
 
         # Fix relative day links to absolute URLs
+        # Fix DD/input links first (e.g., ](11/input) -> absolute URL)
+        data = re.sub(
+            r"\]\((\d+)/input\)",
+            rf"](<https://adventofcode.com/{year}/day/\1/input>)",
+            data,
+        )
+        # Then fix simple day links (e.g., ](11) -> absolute URL)
         data = re.sub(
             r"\]\((\d+)\)",
             rf"](<https://adventofcode.com/{year}/day/\1>)",

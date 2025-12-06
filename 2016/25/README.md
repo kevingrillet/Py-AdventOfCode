@@ -38,5 +38,5 @@ You look toward the sky in desperation... suddenly noticing that a lone star has
 
 You don't have enough stars to transmit the signal, though. You need 5 more.
 
-Although it hasn't changed, you can still [get your puzzle input](25/input).
+Although it hasn't changed, you can still [get your puzzle input](<https://adventofcode.com/2016/day/25/input>).
 

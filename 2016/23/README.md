@@ -59,5 +59,5 @@ Anyway, *what value* should actually be sent to the safe?
 
 Answer:
 
-Although it hasn't changed, you can still [get your puzzle input](23/input).
+Although it hasn't changed, you can still [get your puzzle input](<https://adventofcode.com/2016/day/23/input>).
 
