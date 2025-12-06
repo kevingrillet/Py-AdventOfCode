@@ -34,7 +34,7 @@ def part_one(inpt: list[str]) -> int:
         elif "toggle" in line:
             lights[x1 : x2 + 1, y1 : y2 + 1] = ~lights[x1 : x2 + 1, y1 : y2 + 1]
 
-    return np.count_nonzero(lights)
+    return int(np.count_nonzero(lights))
 
 
 def part_two(inpt: list[str]) -> int:
