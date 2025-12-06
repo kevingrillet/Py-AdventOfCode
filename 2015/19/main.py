@@ -7,6 +7,7 @@ def get_input(filename: str) -> list[str]:
 
 
 def part_one(inpt: list[str]) -> int:
+    """Find all unique molecules after one replacement."""
     molecule = inpt[-1]
     replacements = inpt[:-2]
 
@@ -14,12 +15,12 @@ def part_one(inpt: list[str]) -> int:
     for replacement in replacements:
         molecule_from, molecule_to = replacement.split(" => ")
 
+        # Find all occurrences of molecule_from and replace each one
         pos = 0
         while pos < len(molecule):
             if molecule[pos : pos + len(molecule_from)] == molecule_from:
-                result.add(
-                    molecule[:pos] + molecule_to + molecule[pos + len(molecule_from) :]
-                )
+                new_molecule = molecule[:pos] + molecule_to + molecule[pos + len(molecule_from) :]
+                result.add(new_molecule)
                 pos += len(molecule_from)
             else:
                 pos += 1
@@ -28,28 +29,31 @@ def part_one(inpt: list[str]) -> int:
 
 
 def part_two(inpt: list[str]) -> int:
+    """Find minimum steps to create molecule from 'e'.
+
+    Uses greedy approach with reversed strings to prioritize
+    replacing larger molecules first (greedily reduce complexity).
+    """
     molecule = inpt[-1][::-1]
     replacements = inpt[:-2]
 
-    reverse = {}
-    for replacement in replacements:
-        molecule_from, molecule_to = replacement.split(" => ")
-        reverse[molecule_to[::-1]] = molecule_from[::-1]
+    # Reverse all replacements
+    reverse = {
+        molecule_to[::-1]: molecule_from[::-1]
+        for replacement in replacements
+        for molecule_from, molecule_to in [replacement.split(" => ")]
+    }
 
     result = 0
     while molecule != "e":
-        # Need to reverse the keys to match the biggest molecules possible,
-        # but multiple letters molecule require molecule to be reversed too...
+        # Replace the first matching (largest) molecule
         molecule = re.sub(
             "|".join(reversed(reverse.keys())),
             lambda m: reverse[m.group()],
             molecule,
-            1,
+            count=1,
         )
         result += 1
-        # print(molecule)
-        # if result >= 100:
-        #     exit(1)
 
     return result
 

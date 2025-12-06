@@ -1,5 +1,6 @@
 import itertools
 import re
+from collections import defaultdict
 
 
 def get_input(filename: str) -> list[str]:
@@ -7,82 +8,47 @@ def get_input(filename: str) -> list[str]:
         return [line.strip() for line in f.readlines()]
 
 
-def process(inpt: str, p1: str, p2: str) -> int:
-    r1 = re.compile(
-        r"{} would (gain|lose) (\d+) happiness units by sitting next to {}.".format(
-            p1, p2
-        )
-    )
-    r2 = re.compile(
-        r"{} would (gain|lose) (\d+) happiness units by sitting next to {}.".format(
-            p2, p1
-        )
-    )
+def parse_happiness(inpt: list[str]) -> tuple[set, dict]:
+    """Parse input and return set of persons and happiness dict."""
+    regex = re.compile(r"(\w+) would (gain|lose) (\d+) happiness units by sitting next to (\w+).")
+    happiness = defaultdict(dict)
+    persons = set()
 
-    e1, v1 = map(str, r1.search(inpt).groups())
-    e2, v2 = map(str, r2.search(inpt).groups())
+    for line in inpt:
+        match = regex.search(line)
+        if not match:
+            continue
+        person1, action, value, person2 = match.groups()
+        persons.add(person1)
+        happiness[person1][person2] = int(value) * (1 if action == "gain" else -1)
 
-    return int(v1) * (1 if e1 == "gain" else -1) + int(v2) * (1 if e2 == "gain" else -1)
+    return persons, happiness
+
+
+def calculate_optimal_happiness(persons: set, happiness: dict) -> int:
+    """Calculate the maximum happiness for all seating arrangements."""
+    best_happiness = 0
+
+    for arrangement in itertools.permutations(persons):
+        total = sum(
+            happiness[arrangement[i]].get(arrangement[(i + 1) % len(arrangement)], 0)
+            + happiness[arrangement[(i + 1) % len(arrangement)]].get(arrangement[i], 0)
+            for i in range(len(arrangement))
+        )
+        best_happiness = max(best_happiness, total)
+
+    return best_happiness
 
 
 def part_one(inpt: list[str]) -> int:
-    potential = "".join(inpt)
-
-    persons = []
-    for line in inpt:
-        person = line.split(" ")[0]
-        if person not in persons:
-            persons.append(person)
-
-    permutations = list(itertools.permutations(persons))
-
-    happiest = 0
-    for perm in permutations:
-        happiness = 0
-
-        pos = 0
-        while pos < len(perm):
-            happiness += process(
-                potential, perm[pos], perm[pos + 1 if pos < len(perm) - 1 else 0]
-            )
-            pos += 1
-
-        if happiness > happiest:
-            happiest = happiness
-
-    return happiest
+    persons, happiness = parse_happiness(inpt)
+    return calculate_optimal_happiness(persons, happiness)
 
 
 def part_two(inpt: list[str]) -> int:
-    potential = "".join(inpt)
-
-    persons = ["me"]
-    for line in inpt:
-        person = line.split(" ")[0]
-        if person not in persons:
-            persons.append(person)
-
-    permutations = list(itertools.permutations(persons))
-
-    happiest = 0
-    for perm in permutations:
-        happiness = 0
-
-        pos = 0
-        while pos < len(perm):
-            if (
-                perm[pos] != "me"
-                and perm[pos + 1 if pos < len(perm) - 1 else 0] != "me"
-            ):
-                happiness += process(
-                    potential, perm[pos], perm[pos + 1 if pos < len(perm) - 1 else 0]
-                )
-            pos += 1
-
-        if happiness > happiest:
-            happiest = happiness
-
-    return happiest
+    persons, happiness = parse_happiness(inpt)
+    persons.add("me")
+    return calculate_optimal_happiness(persons, happiness)
 
 
 if __name__ == "__main__":

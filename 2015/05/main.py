@@ -12,11 +12,7 @@ def part_one(inpt: list[str]) -> int:
     regex_double = re.compile(r"(.)\1")
     regex_disallowed = re.compile(r"ab|cd|pq|xy")
     for line in inpt:
-        if (
-            regex_vowels.search(line)
-            and regex_double.search(line)
-            and not regex_disallowed.search(line)
-        ):
+        if regex_vowels.search(line) and regex_double.search(line) and not regex_disallowed.search(line):
             result += 1
     return result
 

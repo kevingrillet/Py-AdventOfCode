@@ -6,7 +6,7 @@ def get_input(filename: str) -> list[str]:
         return [line.strip() for line in f.readlines()]
 
 
-ticker_tape = {
+TICKER_TAPE = {
     "children": 3,
     "cats": 7,
     "samoyeds": 2,
@@ -20,48 +20,47 @@ ticker_tape = {
 }
 
 
+def parse_aunt(line: str) -> tuple[int, dict]:
+    """Parse aunt line and return number and attributes dict."""
+    number_match = re.search(r"Sue (\d+):", line)
+    if not number_match:
+        return -1, {}
+    number = int(number_match.group(1))
+    attrs = {}
+    for match in re.finditer(r"(\w+): (\d+)", line):
+        attrs[match.group(1)] = int(match.group(2))
+    return number, attrs
+
+
 def part_one(inpt: list[str]) -> int:
-    aunts = inpt.copy()
-
-    for aunt in aunts:
-        aunt_ok = True
-        for key in ticker_tape:
-            regex = re.compile(r"{}: (\d+)".format(key))
-            value = regex.search(aunt)
-            if value:
-                if int(value.group(1)) != ticker_tape[key]:
-                    aunt_ok = False
-                    break
-        if aunt_ok:
-            return int(aunt.split(" ")[1][:-1])
-
+    for line in inpt:
+        number, attrs = parse_aunt(line)
+        if all(attrs.get(key, value) == value for key, value in TICKER_TAPE.items()):
+            return number
     return -1
 
 
 def part_two(inpt: list[str]) -> int:
-    aunts = inpt.copy()
-
-    for aunt in aunts:
-        aunt_ok = True
-        for key in ticker_tape:
-            regex = re.compile(r"{}: (\d+)".format(key))
-            value = regex.search(aunt)
-            if value:
-                if key in ("cats", "trees"):
-                    if int(value.group(1)) <= ticker_tape[key]:
-                        aunt_ok = False
-                        break
-                elif key in ("pomeranians", "goldfish"):
-                    if int(value.group(1)) >= ticker_tape[key]:
-                        aunt_ok = False
-                        break
-                else:
-                    if int(value.group(1)) != ticker_tape[key]:
-                        aunt_ok = False
-                        break
-        if aunt_ok:
-            return int(aunt.split(" ")[1][:-1])
-
+    for line in inpt:
+        number, attrs = parse_aunt(line)
+        match = True
+        for key, expected in TICKER_TAPE.items():
+            if key not in attrs:
+                continue
+            actual = attrs[key]
+            if key in ("cats", "trees"):
+                if actual <= expected:
+                    match = False
+                    break
+            elif key in ("pomeranians", "goldfish"):
+                if actual >= expected:
+                    match = False
+                    break
+            elif actual != expected:
+                match = False
+                break
+        if match:
+            return number
     return -1
 
 

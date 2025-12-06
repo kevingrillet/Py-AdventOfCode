@@ -1,53 +1,32 @@
-import numpy as np
-
-
 def get_input(filename: str) -> str:
     with open(filename, encoding="utf8") as f:
         return f.read().strip()
 
 
-def next_direction(dir_char: str) -> list[int]:
-    if dir_char == "^":
-        return [0, 1]
-    elif dir_char == "v":
-        return [0, -1]
-    elif dir_char == ">":
-        return [1, 0]
-    elif dir_char == "<":
-        return [-1, 0]
-    else:
-        raise ValueError("Unknow input")
+DIRECTIONS = {"^": (0, 1), "v": (0, -1), ">": (1, 0), "<": (-1, 0)}
 
 
 def part_one(inpt: str) -> int:
-    visited = [[0, 0]]
-    pos = [0, 0]
+    visited = {(0, 0)}
+    x, y = 0, 0
 
     for direction in inpt:
-        pos = np.add(pos, next_direction(direction)).tolist()
-        if pos not in visited:
-            visited.append(pos)
+        dx, dy = DIRECTIONS[direction]
+        x, y = x + dx, y + dy
+        visited.add((x, y))
 
     return len(visited)
 
 
 def part_two(inpt: str) -> int:
-    visited = [[0, 0]]
-    pos = [0, 0]
-    pos_robot = [0, 0]
-    santa = True
+    visited = {(0, 0)}
+    positions = [(0, 0), (0, 0)]  # [santa, robo-santa]
 
-    for direction in inpt:
-        if santa:
-            pos = np.add(pos, next_direction(direction)).tolist()
-            if pos not in visited:
-                visited.append(pos)
-        else:
-            pos_robot = np.add(pos_robot, next_direction(direction)).tolist()
-            if pos_robot not in visited:
-                visited.append(pos_robot)
-
-        santa = not santa
+    for i, direction in enumerate(inpt):
+        dx, dy = DIRECTIONS[direction]
+        x, y = positions[i % 2]
+        positions[i % 2] = (x + dx, y + dy)
+        visited.add(positions[i % 2])
 
     return len(visited)
 

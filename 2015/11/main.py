@@ -1,5 +1,6 @@
 import re
-import string
+
+MIN_DOUBLE_PAIRS = 2
 
 
 def get_input(filename: str) -> str:
@@ -7,47 +8,35 @@ def get_input(filename: str) -> str:
         return f.read().strip()
 
 
+def has_straight(password: str) -> bool:
+    """Check if password has three consecutive increasing letters."""
+    return any(
+        ord(password[i + 1]) == ord(password[i]) + 1 and ord(password[i + 2]) == ord(password[i]) + 2
+        for i in range(len(password) - 2)
+    )
+
+
 def process(inpt: str) -> str:
-    alphabet = string.ascii_lowercase
     regex_mistaken = re.compile(r"[iol]")
     regex_double = re.compile(r"(.)\1")
-    password = inpt
-    password_reversed = list(reversed(password))
-    password_new = ""
+    password_list = list(inpt)
 
     while True:
-        for pos, char in enumerate(password_reversed):
-            if char == "z":
-                password_reversed[pos] = "a"
+        # Increment password
+        for i in range(len(password_list) - 1, -1, -1):
+            if password_list[i] == "z":
+                password_list[i] = "a"
             else:
-                password_reversed[pos] = alphabet[alphabet.find(char) + 1]
-                password_new = "".join(password_reversed)[-1::-1]
+                password_list[i] = chr(ord(password_list[i]) + 1)
                 break
 
-        if (
-            regex_mistaken.search(password_new)
-            or len(regex_double.findall(password_new)) < 2
-        ):
+        password = "".join(password_list)
+
+        if regex_mistaken.search(password) or len(regex_double.findall(password)) < MIN_DOUBLE_PAIRS:
             continue
 
-        straight = False
-        pos = 0
-        while pos < len(password_new) - 2:
-            if (
-                password_new[pos] not in ("y", "z")
-                and password_new[pos + 1]
-                == alphabet[alphabet.find(password_new[pos]) + 1]
-                and password_new[pos + 2]
-                == alphabet[alphabet.find(password_new[pos]) + 2]
-            ):
-                straight = True
-                break
-            pos += 1
-
-        if straight:
-            break
-
-    return password_new
+        if has_straight(password):
+            return password
 
 
 if __name__ == "__main__":

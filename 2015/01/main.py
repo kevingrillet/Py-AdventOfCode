@@ -4,28 +4,16 @@ def get_input(filename: str) -> str:
 
 
 def part_one(inpt: str) -> int:
-    level = 0
-    for char in inpt:
-        if char == "(":
-            level += 1
-        elif char == ")":
-            level -= 1
-        else:
-            raise ValueError("Unknow input")
-    return level
+    return inpt.count("(") - inpt.count(")")
 
 
 def part_two(inpt: str) -> int:
     level = 0
-    position = 0
-    for char in inpt:
-        if char == "(":
-            level += 1
-        elif char == ")":
-            level -= 1
-        position += 1
-        if level <= -1:
+    for position, char in enumerate(inpt, 1):
+        level += 1 if char == "(" else -1
+        if level == -1:
             return position
+    return -1
 
 
 if __name__ == "__main__":

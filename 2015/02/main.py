@@ -1,4 +1,4 @@
-import numpy as np
+from math import prod
 
 
 def get_input(filename: str) -> list[str]:
@@ -9,27 +9,20 @@ def get_input(filename: str) -> list[str]:
 def part_one(inpt: list[str]) -> int:
     result = 0
     for line in inpt:
-        sides = []
         length, width, height = map(int, line.split("x"))
-        sides.append(2 * length * width)
-        sides.append(2 * width * height)
-        sides.append(2 * height * length)
-        for side in sides:
-            result += side
-        # Slack
-        result += min(sides) // 2
-
+        sides = [length * width, width * height, height * length]
+        result += 2 * sum(sides) + min(sides)
     return result
 
 
 def part_two(inpt: list[str]) -> int:
     result = 0
     for line in inpt:
-        sides = sorted(map(int, line.split("x")))
-        # Wrap
-        result += sides[0] * 2 + sides[1] * 2
-        # Bow
-        result += np.prod(sides)
+        dimensions = sorted(map(int, line.split("x")))
+        # Wrap: smallest perimeter
+        result += 2 * (dimensions[0] + dimensions[1])
+        # Bow: volume
+        result += prod(dimensions)
     return result
 
 

@@ -9,27 +9,24 @@ def get_input(filename: str) -> str:
 
 
 def part_one(inpt: str) -> int:
-    regex_numbers = re.compile(r"-?[0-9]+")
-    numbers = list(map(int, regex_numbers.findall(inpt)))
-    return sum(list(numbers))
+    return sum(map(int, re.findall(r"-?\d+", inpt)))
 
 
 def part_two(inpt: str) -> int:
     json_input = json.loads(inpt)
 
     def process(item: Any) -> int:
-        if type(item) == str:
+        if isinstance(item, str):
             return 0
-        elif type(item) == int:
+        if isinstance(item, int):
             return item
-        elif type(item) == list:
-            return sum([process(subitem) for subitem in item])
-        elif type(item) == dict:
+        if isinstance(item, list):
+            return sum(process(subitem) for subitem in item)
+        if isinstance(item, dict):
             if "red" in item.values():
                 return 0
             return process(list(item.values()))
-        else:
-            raise ValueError("Unknown type: {}".format(type(item)))
+        raise ValueError(f"Unknown type: {type(item)}")
 
     return process(json_input)
 

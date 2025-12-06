@@ -1,4 +1,5 @@
 import re
+from collections import deque
 
 import numpy as np
 
@@ -8,80 +9,74 @@ def get_input(filename: str) -> list[str]:
         return [line.strip() for line in f.readlines()]
 
 
-regex_provide = re.compile(r"(\w+) -> (\w+)")
-regex_gates = re.compile(r"(\w+) (AND|OR|LSHIFT|RSHIFT) (\w+) -> (\w+)")
-regex_complement = re.compile(r"NOT (\w+) -> (\w+)")
+def get_value(wires: dict, key: str) -> int:
+    """Get wire value or convert string number to int."""
+    return int(key) if key.isdigit() else wires[key]
 
 
-def compute(wires: dict, ins: str):
-    value = 0
-    wire_target = ""
+def compute(wires: dict, ins: str) -> bool:
+    """Process a single instruction. Returns True if successful."""
+    parts = ins.split(" -> ")
+    wire_target = parts[1]
 
-    if regex_complement.search(ins):
-        wire_value, wire_target = map(str, regex_complement.findall(ins)[0])
-        value = ~np.uint16(wires[wire_value])
-    elif regex_gates.search(ins):
-        a, operator, b, wire_target = map(str, regex_gates.findall(ins)[0])
-
-        if not a.isnumeric():
-            a = wires[a]
-
-        if not b.isnumeric():
-            b = wires[b]
-
-        a = int(a)
-        b = int(b)
-
-        if operator == "AND":
-            value = a & b
-        elif operator == "OR":
-            value = a | b
-        elif operator == "LSHIFT":
-            value = a << b
-        elif operator == "RSHIFT":
-            value = a >> b
-
-    elif regex_provide.search(ins):
-        signal, wire_target = map(str, regex_provide.findall(ins)[0])
-
-        if signal.isnumeric():
-            value = signal
+    try:
+        if "NOT" in parts[0]:
+            match = re.match(r"NOT (\w+)", parts[0])
+            if not match:
+                return False
+            value = ~np.uint16(get_value(wires, match.group(1)))
+        elif "AND" in parts[0]:
+            match = re.match(r"(\w+) AND (\w+)", parts[0])
+            if not match:
+                return False
+            value = get_value(wires, match.group(1)) & get_value(wires, match.group(2))
+        elif "OR" in parts[0]:
+            match = re.match(r"(\w+) OR (\w+)", parts[0])
+            if not match:
+                return False
+            value = get_value(wires, match.group(1)) | get_value(wires, match.group(2))
+        elif "LSHIFT" in parts[0]:
+            match = re.match(r"(\w+) LSHIFT (\w+)", parts[0])
+            if not match:
+                return False
+            value = get_value(wires, match.group(1)) << get_value(wires, match.group(2))
+        elif "RSHIFT" in parts[0]:
+            match = re.match(r"(\w+) RSHIFT (\w+)", parts[0])
+            if not match:
+                return False
+            value = get_value(wires, match.group(1)) >> get_value(wires, match.group(2))
         else:
-            value = wires[signal]
+            # Direct assignment
+            value = get_value(wires, parts[0])
 
-    wires[wire_target] = value
+        wires[wire_target] = int(value)
+        return True
+    except (KeyError, AttributeError):
+        return False
 
 
 def part_one(inpt: list[str]) -> dict:
-    instructions = inpt.copy()
+    instructions = deque(inpt)
     wires = {}
 
     while instructions:
-        for instruction in instructions:
-            try:
-                compute(wires=wires, ins=instruction)
-                instructions.remove(instruction)
-            except KeyError:
-                continue
+        instruction = instructions.popleft()
+        if not compute(wires, instruction):
+            instructions.append(instruction)  # Retry later
 
     return dict(sorted(wires.items()))
 
 
 def part_two(inpt: list[str], input_wires: dict) -> dict:
-    instructions = inpt.copy()
-    regex_target = re.compile(r"-> (\w+)")
+    instructions = deque(inpt)
     wires = {"b": input_wires["a"]}
 
     while instructions:
-        for instruction in instructions:
-            try:
-                if regex_target.search(instruction).group(1) != "b":
-                    compute(wires=wires, ins=instruction)
-                instructions.remove(instruction)
-            except KeyError:
-                continue
+        instruction = instructions.popleft()
+        wire_target = instruction.split(" -> ")[1]
+        if wire_target != "b" and not compute(wires, instruction):
+            instructions.append(instruction)  # Retry later
 
-    # https://youtrack.jetbrains.com/issue/PY-51195/Incorrect-warning-raised-in-dict
     return dict(sorted(wires.items()))
 
 

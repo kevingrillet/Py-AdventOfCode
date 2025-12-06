@@ -10,22 +10,22 @@ def get_input(filename: str) -> str:
         return f.read().strip()
 
 
-def part_one(inpt: str) -> int:
+def find_hash_with_prefix(inpt: str, prefix: str) -> int:
+    """Find the lowest number that produces an MD5 hash starting with the given prefix."""
     result = 0
     while True:
-        hexa = hashlib.md5("{}{}".format(inpt, result).encode("utf8")).hexdigest()
-        if str(hexa)[:5] == MD5_PREFIX_PART_ONE:
+        hexa = hashlib.md5(f"{inpt}{result}".encode()).hexdigest()
+        if hexa.startswith(prefix):
             return result
         result += 1
+
+
+def part_one(inpt: str) -> int:
+    return find_hash_with_prefix(inpt, MD5_PREFIX_PART_ONE)
 
 
 def part_two(inpt: str) -> int:
-    result = 0
-    while True:
-        hexa = hashlib.md5("{}{}".format(inpt, result).encode("utf8")).hexdigest()
-        if str(hexa)[:6] == MD5_PREFIX_PART_TWO:
-            return result
-        result += 1
+    return find_hash_with_prefix(inpt, MD5_PREFIX_PART_TWO)
 
 
 if __name__ == "__main__":

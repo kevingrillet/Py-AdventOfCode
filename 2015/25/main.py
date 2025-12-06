@@ -11,30 +11,26 @@ def get_input(filename: str) -> str:
         return f.read().strip()
 
 
-dest_row = 0
-dest_col = 0
+def get_code_at_position(row: int, col: int) -> int:
+    """Calculate the code at given row and column."""
+    # Calculate which iteration this position is at
+    # Position in diagonal: sum of first (row+col-1) numbers, minus (row-1)
+    diagonal = row + col - 1
+    position = diagonal * (diagonal - 1) // 2 + col
 
-
-def process(code: int) -> int:
-    row = col = 1
-    while True:
+    # Calculate code value
+    code = STARTING_CODE
+    for _ in range(position - 1):
         code = (code * CODE_MULTIPLIER) % CODE_MODULO
-        if row == 1:
-            row = col + 1
-            col = 1
 
-        else:
-            row -= 1
-            col += 1
+    return code
 
-        if dest_row == row and dest_col == col:
-            return code
+
+def part_one(row: int, col: int) -> int:
+    return get_code_at_position(row, col)
 
 
 if __name__ == "__main__":
     input_string = get_input(filename="input")
-    regex = re.compile(r"row (\d+), column (\d+).")
-
-    dest_row, dest_col = map(int, regex.search(input_string).groups())
-
-    print(f"Part one: {process(STARTING_CODE)}")
+    row, col = map(int, re.findall(r"\d+", input_string))
+    print(f"Part one: {part_one(row, col)}")

@@ -1,5 +1,6 @@
 import itertools
 import re
+from collections import defaultdict
 
 
 def get_input(filename: str) -> list[str]:
@@ -8,46 +9,29 @@ def get_input(filename: str) -> list[str]:
 
 
 def process(inpt: list[str]) -> tuple[int, int]:
-    regex_distances = re.compile(r"(\w*) to (\w*) = (\d*)")
-    routes = inpt.copy()
+    regex_distances = re.compile(r"(\w+) to (\w+) = (\d+)")
+    distances = defaultdict(dict)
     places = set()
 
-    for route in routes:
-        place_start, place_destination, distance = map(str, regex_distances.findall(route)[0])
+    # Build distance dictionary
+    for route in inpt:
+        match = regex_distances.search(route)
+        if not match:
+            continue
+        place_start, place_destination, distance = match.groups()
+        distance = int(distance)
         places.add(place_start)
         places.add(place_destination)
+        distances[place_start][place_destination] = distance
+        distances[place_destination][place_start] = distance
 
-    permutations = list(itertools.permutations(places))
+    # Calculate all route distances
+    route_lengths = []
+    for permutation in itertools.permutations(places):
+        total_distance = sum(distances[permutation[i]][permutation[i + 1]] for i in range(len(permutation) - 1))
+        route_lengths.append(total_distance)
 
-    shortest = 10000
-    longest = 0
-
-    for permutation in permutations:
-        distance = 0
-        step = 0
-        while step < len(permutation) - 1:
-            place_start = permutation[step]
-            place_destination = permutation[step + 1]
-
-            regex_from_to = re.compile(r"{} to {} = (\d*)".format(place_start, place_destination))
-            regex_to_from = re.compile(r"{} to {} = (\d*)".format(place_destination, place_start))
-
-            for route in routes:
-                if regex_from_to.search(route):
-                    distance += int(regex_from_to.search(route).group(1))
-                    break
-                elif regex_to_from.search(route):
-                    distance += int(regex_to_from.search(route).group(1))
-                    break
-
-            step += 1
-
-        if distance < shortest:
-            shortest = distance
-        if distance > longest:
-            longest = distance
-
-    return shortest, longest
+    return min(route_lengths), max(route_lengths)
 
 
 if __name__ == "__main__":

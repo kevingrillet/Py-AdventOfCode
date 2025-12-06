@@ -1,4 +1,5 @@
 import itertools
+from math import prod
 
 
 def get_input(filename: str) -> list[str]:
@@ -6,41 +7,26 @@ def get_input(filename: str) -> list[str]:
         return [line.strip() for line in f.readlines()]
 
 
-def process(inpt: list[int], nb_group: int) -> int:
-    group_weight = sum(inpt) // nb_group
-    group_smallest = len(inpt)
-    group_best = []
+def find_min_qe(packages: list[int], nb_groups: int) -> int:
+    """Find minimum quantum entanglement for optimal grouping."""
+    group_weight = sum(packages) // nb_groups
 
-    cpt = 0
-    while cpt < len(inpt):
-        cpt += 1
-        if cpt > group_smallest:
-            break
+    # Find smallest group size that works
+    for size in range(1, len(packages)):
+        valid_combos = [combo for combo in itertools.combinations(packages, size) if sum(combo) == group_weight]
 
-        combinations = itertools.combinations(inpt, cpt)
-        for combination in combinations:
-            if sum(combination) == group_weight:
-                group_best.append(list(combination))
-                group_smallest = cpt
+        if valid_combos:
+            return min(prod(combo) for combo in valid_combos)
 
-    result = max(inpt) ** len(inpt)
-
-    for combination in group_best:
-        qe = 1
-        for weight in combination:
-            qe *= weight
-
-        result = min(result, qe)
-
-    return result
+    return 0
 
 
 def part_one(inpt: list[int]) -> int:
-    return process(inpt, 3)
+    return find_min_qe(inpt, 3)
 
 
 def part_two(inpt: list[int]) -> int:
-    return process(inpt, 4)
+    return find_min_qe(inpt, 4)
 
 
 if __name__ == "__main__":

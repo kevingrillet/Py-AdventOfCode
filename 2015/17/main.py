@@ -11,28 +11,21 @@ def get_input(filename: str) -> list[str]:
 
 def part_one(inpt: list[str]) -> int:
     containers = list(map(int, inpt))
-
-    result = 0
-    for nb in range(len(containers)):
-        for combination in itertools.combinations(containers, nb):
-            if sum(combination) == EGGNOG_LITERS:
-                result += 1
-
-    return result
+    return sum(
+        1
+        for nb in range(len(containers))
+        for combo in itertools.combinations(containers, nb)
+        if sum(combo) == EGGNOG_LITERS
+    )
 
 
 def part_two(inpt: list[str]) -> int:
     containers = list(map(int, inpt))
-
-    result = 0
     for nb in range(len(containers)):
-        for combination in itertools.combinations(containers, nb):
-            if sum(combination) == EGGNOG_LITERS:
-                result += 1
-        if result != 0:
-            break
-
-    return result
+        count = sum(1 for combo in itertools.combinations(containers, nb) if sum(combo) == EGGNOG_LITERS)
+        if count > 0:
+            return count
+    return 0
 
 
 if __name__ == "__main__":

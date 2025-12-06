@@ -1,4 +1,4 @@
-import time
+from dataclasses import dataclass
 
 # Spell costs and effects
 MAGIC_MISSILE_COST = 53
@@ -26,213 +26,150 @@ def get_input(filename: str) -> list[str]:
         return [line.strip() for line in f.readlines()]
 
 
+@dataclass
+class GameState:
+    player_hp: int
+    player_mana: int
+    boss_hp: int
+    boss_damage: int
+    shield_turns: int = 0
+    poison_turns: int = 0
+    recharge_turns: int = 0
+
+    def apply_effects(self) -> None:
+        """Apply ongoing effects and decrease their duration."""
+        if self.poison_turns > 0:
+            self.boss_hp -= POISON_DAMAGE
+            self.poison_turns -= 1
+
+        if self.recharge_turns > 0:
+            self.player_mana += RECHARGE_MANA
+            self.recharge_turns -= 1
+
+        if self.shield_turns > 0:
+            self.shield_turns -= 1
+
+    @property
+    def armor(self) -> int:
+        return SHIELD_ARMOR if self.shield_turns > 0 else 0
+
+
+def battle(state: GameState, player_turn: bool, depth: int, hard_mode: bool = False) -> int:
+    if depth == 0:
+        return 100000
+
+    if hard_mode and player_turn:
+        state.player_hp -= 1
+        if state.player_hp <= 0:
+            return 100000
+
+    state.apply_effects()
+
+    if state.boss_hp <= 0:
+        return 0
+
+    if not player_turn:
+        # Boss turn
+        state.player_hp -= max(1, state.boss_damage - state.armor)
+        if state.player_hp <= 0:
+            return 100000
+        return battle(state, True, depth - 1, hard_mode)
+
+    # Player turn - try all possible spells
+    if state.player_mana < MAGIC_MISSILE_COST:
+        return 100000
+
+    min_cost = 100000
+
+    # Try Magic Missile
+    if state.player_mana >= MAGIC_MISSILE_COST:
+        new_state = GameState(
+            state.player_hp,
+            state.player_mana - MAGIC_MISSILE_COST,
+            state.boss_hp - MAGIC_MISSILE_DAMAGE,
+            state.boss_damage,
+            state.shield_turns,
+            state.poison_turns,
+            state.recharge_turns,
+        )
+        min_cost = min(min_cost, MAGIC_MISSILE_COST + battle(new_state, False, depth - 1, hard_mode))
+
+    # Try Drain
+    if state.player_mana >= DRAIN_COST:
+        new_state = GameState(
+            state.player_hp + DRAIN_HEAL,
+            state.player_mana - DRAIN_COST,
+            state.boss_hp - DRAIN_DAMAGE,
+            state.boss_damage,
+            state.shield_turns,
+            state.poison_turns,
+            state.recharge_turns,
+        )
+        min_cost = min(min_cost, DRAIN_COST + battle(new_state, False, depth - 1, hard_mode))
+
+    # Try Shield
+    if state.player_mana >= SHIELD_COST and state.shield_turns == 0:
+        new_state = GameState(
+            state.player_hp,
+            state.player_mana - SHIELD_COST,
+            state.boss_hp,
+            state.boss_damage,
+            SHIELD_DURATION,
+            state.poison_turns,
+            state.recharge_turns,
+        )
+        min_cost = min(min_cost, SHIELD_COST + battle(new_state, False, depth - 1, hard_mode))
+
+    # Try Poison
+    if state.player_mana >= POISON_COST and state.poison_turns == 0:
+        new_state = GameState(
+            state.player_hp,
+            state.player_mana - POISON_COST,
+            state.boss_hp,
+            state.boss_damage,
+            state.shield_turns,
+            POISON_DURATION,
+            state.recharge_turns,
+        )
+        min_cost = min(min_cost, POISON_COST + battle(new_state, False, depth - 1, hard_mode))
+
+    # Try Recharge
+    if state.player_mana >= RECHARGE_COST and state.recharge_turns == 0:
+        new_state = GameState(
+            state.player_hp,
+            state.player_mana - RECHARGE_COST,
+            state.boss_hp,
+            state.boss_damage,
+            state.shield_turns,
+            state.poison_turns,
+            RECHARGE_DURATION,
+        )
+        min_cost = min(min_cost, RECHARGE_COST + battle(new_state, False, depth - 1, hard_mode))
+
+    return min_cost
+
+
 def init_boss(inpt: list[str]) -> dict:
-    boss = {"Hit Points": 100, "Damage": 0}
+    boss = {}
     for line in inpt:
         stat_name, stat_value = line.split(":")
         boss[stat_name] = int(stat_value)
-
     return boss
-
-
-part_2 = False
-
-
-def battle(
-    player_hp: int,
-    player_mana: int,
-    boss_hp: int,
-    boss_damage: int,
-    shield_turns: int,
-    poison_turns: int,
-    recharge_turns: int,
-    player_turn: bool,
-    depth: int,
-) -> int:
-    # print('Depth:', str(depth).zfill(2),
-    #       ';PlayerHP:', str(player_hp).zfill(3), ';PlayerMana:', str(player_mana).zfill(3),
-    #       ';BossHP:', str(boss_hp).zfill(2), 'BossDmg:', str(boss_damage).zfill(2),
-    #       ';ShieldTurns:', shield_turns, ';PoisonTurns:', poison_turns, ';RechargeTurns:', recharge_turns,
-    #       ';PlayerTurn:', player_turn)
-
-    if part_2 and player_turn:
-        player_hp -= 1
-    if depth == 0:
-        raise NameError("Max depth")
-    if boss_hp <= 0:
-        return 0
-    if player_hp <= 0:
-        return 100000
-
-    new_shield_turns = max(0, shield_turns - 1)
-    new_poison_turns = max(0, poison_turns - 1)
-    new_recharge_turns = max(0, recharge_turns - 1)
-
-    if player_turn:
-        if poison_turns > 0:
-            boss_hp -= POISON_DAMAGE
-
-        if boss_hp <= 0:
-            return 0
-
-        if recharge_turns > 0:
-            player_mana += RECHARGE_MANA
-
-        result = 100000
-
-        if player_mana < MAGIC_MISSILE_COST:
-            return result
-
-        # Magic Missile
-        if player_mana >= MAGIC_MISSILE_COST:
-            new_player_mana = player_mana - MAGIC_MISSILE_COST
-            new_boss_hp = boss_hp - MAGIC_MISSILE_DAMAGE
-            result = min(
-                result,
-                MAGIC_MISSILE_COST
-                + battle(
-                    player_hp,
-                    new_player_mana,
-                    new_boss_hp,
-                    boss_damage,
-                    new_shield_turns,
-                    new_poison_turns,
-                    new_recharge_turns,
-                    not player_turn,
-                    depth - 1,
-                ),
-            )
-
-        # Drain
-        if player_mana >= DRAIN_COST:
-            new_player_mana = player_mana - DRAIN_COST
-            new_player_hp = player_hp + DRAIN_HEAL
-            new_boss_hp = boss_hp - DRAIN_DAMAGE
-            result = min(
-                result,
-                DRAIN_COST
-                + battle(
-                    new_player_hp,
-                    new_player_mana,
-                    new_boss_hp,
-                    boss_damage,
-                    new_shield_turns,
-                    new_poison_turns,
-                    new_recharge_turns,
-                    not player_turn,
-                    depth - 1,
-                ),
-            )
-
-        # Shield
-        if player_mana >= SHIELD_COST and new_shield_turns == 0:
-            new_player_mana = player_mana - SHIELD_COST
-            result = min(
-                result,
-                SHIELD_COST
-                + battle(
-                    player_hp,
-                    new_player_mana,
-                    boss_hp,
-                    boss_damage,
-                    SHIELD_DURATION,
-                    new_poison_turns,
-                    new_recharge_turns,
-                    not player_turn,
-                    depth - 1,
-                ),
-            )
-
-        # Poison
-        if player_mana >= POISON_COST and new_poison_turns == 0:
-            new_player_mana = player_mana - POISON_COST
-            result = min(
-                result,
-                POISON_COST
-                + battle(
-                    player_hp,
-                    new_player_mana,
-                    boss_hp,
-                    boss_damage,
-                    new_shield_turns,
-                    POISON_DURATION,
-                    new_recharge_turns,
-                    not player_turn,
-                    depth - 1,
-                ),
-            )
-
-        # Recharge
-        if player_mana >= RECHARGE_COST and new_recharge_turns == 0:
-            new_player_mana = player_mana - RECHARGE_COST
-            result = min(
-                result,
-                RECHARGE_COST
-                + battle(
-                    player_hp,
-                    new_player_mana,
-                    boss_hp,
-                    boss_damage,
-                    new_shield_turns,
-                    new_poison_turns,
-                    RECHARGE_DURATION,
-                    not player_turn,
-                    depth - 1,
-                ),
-            )
-
-        return result
-    else:
-        if poison_turns > 0:
-            boss_hp -= POISON_DAMAGE
-
-        if recharge_turns > 0:
-            player_mana += RECHARGE_MANA
-
-        if boss_hp <= 0:
-            return 0
-        else:
-            player_hp -= max(1, boss_damage - (0 if shield_turns == 0 else SHIELD_ARMOR))
-
-        return battle(
-            player_hp,
-            player_mana,
-            boss_hp,
-            boss_damage,
-            new_shield_turns,
-            new_poison_turns,
-            new_recharge_turns,
-            not player_turn,
-            depth - 1,
-        )
-
-
-def example() -> int:
-    return battle(10, 250, 13, 8, 0, 0, 0, True, 25)
-
-
-def example2() -> int:
-    return battle(50, 500, 13, 14, 0, 0, 0, True, 25)
 
 
 def part_one(inpt: list[str]) -> int:
     boss = init_boss(inpt)
-    return battle(50, 500, boss["Hit Points"], boss["Damage"], 0, 0, 0, True, 100)
+    state = GameState(50, 500, boss["Hit Points"], boss["Damage"])
+    return battle(state, True, 100, False)
 
 
 def part_two(inpt: list[str]) -> int:
-    global part_2
-    part_2 = True
-    return part_one(inpt)
+    boss = init_boss(inpt)
+    state = GameState(50, 500, boss["Hit Points"], boss["Damage"])
+    return battle(state, True, 100, True)
 
 
 if __name__ == "__main__":
     input_string = get_input(filename="input")
-    # print(f'Example one: {example()}')
-    # print(f'Example two: {example2()}')
-    st = time.time()
     print(f"Part one: {part_one(inpt=input_string)}")
-    print(f"Execution time: {time.time() - st} seconds")
-    st = time.time()
     print(f"Part two: {part_two(inpt=input_string)}")
-    print(f"Execution time: {time.time() - st} seconds")

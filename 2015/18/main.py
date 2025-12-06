@@ -1,116 +1,71 @@
 import numpy as np
 
+MIN_NEIGHBORS_TO_SPAWN = 3
+
 
 def get_input(filename: str) -> list[str]:
     with open(filename, encoding="utf8") as f:
         return [line.strip() for line in f.readlines()]
 
 
-adjacent_matrice = [
-    [-1, -1],
-    [0, -1],
-    [1, -1],
-    [-1, 0],
-    [1, 0],
-    [-1, 1],
-    [0, 1],
-    [1, 1],
+ADJACENT_OFFSETS = [
+    (-1, -1),
+    (0, -1),
+    (1, -1),
+    (-1, 0),
+    (1, 0),
+    (-1, 1),
+    (0, 1),
+    (1, 1),
 ]
 
 
-def print_lights(lights: np.ndarray) -> None:
-    for x in lights:
-        print("".join(x))
+def count_neighbors(lights: np.ndarray, x: int, y: int, size: int) -> int:
+    """Count lit neighbors for a given position."""
+    count = 0
+    for dx, dy in ADJACENT_OFFSETS:
+        nx, ny = x + dx, y + dy
+        if 0 <= nx < size and 0 <= ny < size and lights[nx][ny] == "#":
+            count += 1
+    return count
 
 
-def part_one(inpt: list[str], final_step: int = 100) -> int:
-    lights = np.full((len(inpt), len(inpt)), ".", str)
+def simulate_lights(inpt: list[str], final_step: int, stuck_corners: bool = False) -> int:
+    """Simulate Conway's Game of Life for lights."""
+    size = len(inpt)
+    lights = np.array([list(line) for line in inpt])
 
-    for x, line in enumerate(inpt):
-        for y, light in enumerate(line):
-            lights[x][y] = light
-
-    step = 0
-    while step < final_step:
-        step += 1
-        new_lights = np.full((len(inpt), len(inpt)), ".", str)
-
-        for x in range(len(lights)):
-            for y in range(len(lights)):
-
-                neighbors_on = 0
-                for neighbor in adjacent_matrice:
-                    if (
-                        x + neighbor[0] < 0
-                        or x + neighbor[0] > len(lights) - 1
-                        or y + neighbor[1] < 0
-                        or y + neighbor[1] > len(lights) - 1
-                    ):
-                        continue
-                    if lights[x + neighbor[0]][y + neighbor[1]] == "#":
-                        neighbors_on += 1
-
-                if lights[x][y] == "#" and neighbors_on in (2, 3):
-                    new_lights[x][y] = "#"
-                elif lights[x][y] != "#" and neighbors_on == 3:
-                    new_lights[x][y] = "#"
-
-        lights = new_lights
-        # print(step)
-        # print_lights(lights)
-
-    return np.count_nonzero(lights == "#")
-
-
-def part_two(inpt: list[str], final_step: int = 100) -> int:
-    lights = np.full((len(inpt), len(inpt)), ".", str)
-    corners = [
-        [0, 0],
-        [0, len(lights) - 1],
-        [len(lights) - 1, 0],
-        [len(lights) - 1, len(lights) - 1],
-    ]
-
-    for x, line in enumerate(inpt):
-        for y, light in enumerate(line):
-            lights[x][y] = light
+    corners = [(0, 0), (0, size - 1), (size - 1, 0), (size - 1, size - 1)] if stuck_corners else []
 
     for corner in corners:
-        lights[corner[0]][corner[1]] = "#"
+        lights[corner] = "#"
 
-    step = 0
-    while step < final_step:
-        step += 1
-        new_lights = np.full((len(inpt), len(inpt)), ".", str)
+    for _ in range(final_step):
+        new_lights = np.full((size, size), ".", str)
 
-        for x in range(len(lights)):
-            for y in range(len(lights)):
+        for x in range(size):
+            for y in range(size):
+                neighbors_on = count_neighbors(lights, x, y, size)
 
-                neighbors_on = 0
-                for neighbor in adjacent_matrice:
-                    if (
-                        x + neighbor[0] < 0
-                        or x + neighbor[0] > len(lights) - 1
-                        or y + neighbor[1] < 0
-                        or y + neighbor[1] > len(lights) - 1
-                    ):
-                        continue
-                    if lights[x + neighbor[0]][y + neighbor[1]] == "#":
-                        neighbors_on += 1
-
-                if lights[x][y] == "#" and neighbors_on in (2, 3):
+                if lights[x][y] == "#" and neighbors_on in (2, MIN_NEIGHBORS_TO_SPAWN):
                     new_lights[x][y] = "#"
-                elif lights[x][y] != "#" and neighbors_on == 3:
+                elif lights[x][y] == "." and neighbors_on == MIN_NEIGHBORS_TO_SPAWN:
                     new_lights[x][y] = "#"
 
         for corner in corners:
-            new_lights[corner[0]][corner[1]] = "#"
+            new_lights[corner] = "#"
 
         lights = new_lights
-        # print(step)
-        # print_lights(lights)
 
     return np.count_nonzero(lights == "#")
+
+
+def part_one(inpt: list[str], final_step: int = 100) -> int:
+    return simulate_lights(inpt, final_step, stuck_corners=False)
+
+
+def part_two(inpt: list[str], final_step: int = 100) -> int:
+    return simulate_lights(inpt, final_step, stuck_corners=True)
 
 
 if __name__ == "__main__":

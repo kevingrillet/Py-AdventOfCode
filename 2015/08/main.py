@@ -1,48 +1,29 @@
+import ast
+
+
 def get_input(filename: str) -> list[str]:
     with open(filename, encoding="utf8") as f:
         return [line.strip() for line in f.readlines()]
 
 
 def part_one(inpt: list[str]) -> int:
-    lines = inpt.copy()
+    """Calculate difference between code and memory representation."""
     result = 0
-    for line in lines:
-        # literals
-        result += len(line)
-
-        line = line.strip()[1:-1]
-
-        i = 0
-        while i < len(line):
-            # in memory
-            result -= 1
-            if line[i] == "\\":
-                if line[i + 1] == "x":
-                    i += 4
-                else:
-                    i += 2
-            else:
-                i += 1
-
+    for line in inpt:
+        code_length = len(line)
+        memory_length = len(ast.literal_eval(line))
+        result += code_length - memory_length
     return result
 
 
 def part_two(inpt: list[str]) -> int:
-    lines = inpt.copy()
+    """Calculate difference between encoded and original representation."""
     result = 0
-    for line in lines:
-        # literals
-        result -= len(line)
-
-        # outer "
-        result += 2
-
-        for char in line:
-            if char in ("\\", '"'):
-                result += 2
-            else:
-                result += 1
-
+    for line in inpt:
+        original_length = len(line)
+        # Encode: add outer quotes and escape internal quotes and backslashes
+        encoded_length = len(line.replace("\\", "\\\\").replace('"', '\\"')) + 2
+        result += encoded_length - original_length
     return result
 
 
