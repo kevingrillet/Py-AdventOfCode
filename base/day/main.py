@@ -5,11 +5,11 @@ def get_input(filename: str) -> list[str]:
 
 
 def part_one(inpt: list[str]) -> int:
-    pass
+    return 0
 
 
 def part_two(inpt: list[str]) -> int:
-    pass
+    return 0
 
 
 if __name__ == "__main__":

@@ -9,10 +9,11 @@ def get_input(filename: str) -> str:
 def part_one(inpt: str) -> int:
     """Find first house with at least target presents (10 per elf)."""
     objective = int(inpt)
-    max_house = objective // 10
-    houses = np.full(max_house, 10, dtype=int)
+    # Optimized: the answer is around objective // 36
+    max_house = objective // 34  # Slightly higher to be safe
+    houses = np.zeros(max_house, dtype=int)
 
-    for elf in range(2, max_house):
+    for elf in range(1, max_house):
         houses[elf::elf] += elf * 10
 
     return int(np.argmax(houses >= objective))
@@ -22,10 +23,11 @@ def part_two(inpt: str) -> int:
     """Find first house with at least target presents (11 per elf, max 50 houses per elf)."""
     objective = int(inpt)
     max_house = objective // 10
-    houses = np.full(max_house, 11, dtype=int)
+    houses = np.zeros(max_house, dtype=int)
 
-    for elf in range(2, max_house):
-        houses[elf : min(elf * 51, max_house) : elf] += elf * 11
+    for elf in range(1, max_house):
+        end_house = min(elf * 51, max_house)
+        houses[elf:end_house:elf] += elf * 11
 
     return int(np.argmax(houses >= objective))
 

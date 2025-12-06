@@ -1,0 +1,11 @@
+{
+  "venvPath": ".",
+  "venv": "venv",
+  "pythonVersion": "3.9",
+  "typeCheckingMode": "standard",
+  "exclude": [
+    "**/input",
+    "**/example*",
+    "**/*.md"
+  ]
+}

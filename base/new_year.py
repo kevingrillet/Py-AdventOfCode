@@ -12,6 +12,8 @@ COOKIES = {"session": config.SESSION}
 FORCE = False
 NEW = "2017"
 
+HTTP_OK = 200
+
 
 def add_day_input(year: str, d: int) -> None:
     """
@@ -20,12 +22,12 @@ def add_day_input(year: str, d: int) -> None:
     :param d: wanted day (not formated on 2 characters)
     :return:
     """
-    day = "{:02d}".format(d)
+    day = f"{d:02d}"
     if os.stat(f"../{year}/{day}/input").st_size != 0:
         return
     url = f"https://adventofcode.com/{year}/day/{d}"
     rq = requests.get(f"{url}/input", cookies=COOKIES)
-    if rq.status_code == 200:
+    if rq.status_code == HTTP_OK:
         inpt = open(f"../{year}/{day}/input", "w+")
         inpt.write(rq.text)
         inpt.seek(0)
@@ -43,9 +45,7 @@ def add_day_input(year: str, d: int) -> None:
             )
         inpt.close()
     else:
-        raise NameError(
-            f"requests.get({url}/input, cookies=COOKIES) responded with a status of: {rq.status_code}."
-        )
+        raise NameError(f"requests.get({url}/input, cookies=COOKIES) responded with a status of: {rq.status_code}.")
 
 
 def add_day_readme(year: str, d: int) -> None:
@@ -55,7 +55,7 @@ def add_day_readme(year: str, d: int) -> None:
     :param d: wanted day (not formated on 2 characters)
     :return:
     """
-    day = "{:02d}".format(d)
+    day = f"{d:02d}"
     if os.path.isfile(f"../{year}/{day}/README.md") and not FORCE:
         with open(f"../{year}/{day}/README.md") as f:
             for line in f:
@@ -64,7 +64,7 @@ def add_day_readme(year: str, d: int) -> None:
 
     url = f"https://adventofcode.com/{year}/day/{d}"
     rq = requests.get(url, cookies=COOKIES)
-    if rq.status_code == 200:
+    if rq.status_code == HTTP_OK:
         soup = BeautifulSoup(rq.content, "html.parser")
         data = markdownify(str(soup.find("main")), heading_style="ATX")
 
@@ -123,19 +123,19 @@ def add_title_readme(year: str) -> None:
         for day in days:
             url = f"https://adventofcode.com/{year}/day/{day}"
             rq = requests.get(url, cookies=COOKIES)
-            if rq.status_code == 200:
+            if rq.status_code == HTTP_OK:
                 soup = BeautifulSoup(rq.content, "html.parser")
-                title = " ".join(soup.find("h2").get_text().split()[3:-1])
-                days_to_add.append(
-                    (
-                        f"[](<https://adventofcode.com/{year}/day/{day}>)",
-                        f"[{title}](<https://adventofcode.com/{year}/day/{day}>)",
+                h2_tag = soup.find("h2")
+                if h2_tag:
+                    title = " ".join(h2_tag.get_text().split()[3:-1])
+                    days_to_add.append(
+                        (
+                            f"[](<https://adventofcode.com/{year}/day/{day}>)",
+                            f"[{title}](<https://adventofcode.com/{year}/day/{day}>)",
+                        )
                     )
-                )
             else:
-                print(
-                    f"requests.get({url}) responded with a status of: {rq.status_code}."
-                )
+                print(f"requests.get({url}) responded with a status of: {rq.status_code}.")
                 break
         if len(days_to_add) > 0:
             replace_in_file([f"../{year}/README.md"], days_to_add)
@@ -149,7 +149,7 @@ def create_new_day(year: str, d: int) -> None:
     :return:
     """
     # Add day folder
-    day = "{:02d}".format(d)
+    day = f"{d:02d}"
     if not os.path.exists(f"../{year}/{day}"):
         shutil.copytree("./day/", f"../{year}/{day}")
     add_day_input(year, d)
@@ -164,7 +164,7 @@ def create_new_days(year: str) -> None:
     """
     for d in range(1, 26):
         create_new_day(year, d)
-        print(f'Done: Year {year} Day {"{:02d}".format(d)}')
+        print(f'Done: Year {year} Day {f"{d:02d}"}')
 
 
 def create_new_year(year: str) -> None:
@@ -192,7 +192,7 @@ def remove_line_in_file(paths: list[str], matchs: list[str]) -> None:
     :return:
     """
     for path in paths:
-        file = open(path, "r")
+        file = open(path)
         filedata = file.read()
         file.close()
 
@@ -212,7 +212,7 @@ def replace_in_file(paths: list[str], matchs: list[tuple[str, str]]) -> None:
     :return:
     """
     for path in paths:
-        file = open(path, "r")
+        file = open(path)
         filedata = file.read()
         file.close()
 
@@ -227,4 +227,4 @@ def replace_in_file(paths: list[str], matchs: list[tuple[str, str]]) -> None:
 if __name__ == "__main__":
     create_new_year(NEW)
     create_new_days(NEW)
-    print(f"Done!")
+    print("Done!")

@@ -14,42 +14,55 @@ def get_value(wires: dict, key: str) -> int:
     return int(key) if key.isdigit() else wires[key]
 
 
+def apply_not(wires: dict, match) -> int:
+    """Apply NOT operation."""
+    return int(~np.uint16(get_value(wires, match.group(1))))
+
+
+def apply_and(wires: dict, match) -> int:
+    """Apply AND operation."""
+    return get_value(wires, match.group(1)) & get_value(wires, match.group(2))
+
+
+def apply_or(wires: dict, match) -> int:
+    """Apply OR operation."""
+    return get_value(wires, match.group(1)) | get_value(wires, match.group(2))
+
+
+def apply_lshift(wires: dict, match) -> int:
+    """Apply LSHIFT operation."""
+    return get_value(wires, match.group(1)) << get_value(wires, match.group(2))
+
+
+def apply_rshift(wires: dict, match) -> int:
+    """Apply RSHIFT operation."""
+    return get_value(wires, match.group(1)) >> get_value(wires, match.group(2))
+
+
 def compute(wires: dict, ins: str) -> bool:
     """Process a single instruction. Returns True if successful."""
     parts = ins.split(" -> ")
     wire_target = parts[1]
 
-    try:
-        if "NOT" in parts[0]:
-            match = re.match(r"NOT (\w+)", parts[0])
-            if not match:
-                return False
-            value = ~np.uint16(get_value(wires, match.group(1)))
-        elif "AND" in parts[0]:
-            match = re.match(r"(\w+) AND (\w+)", parts[0])
-            if not match:
-                return False
-            value = get_value(wires, match.group(1)) & get_value(wires, match.group(2))
-        elif "OR" in parts[0]:
-            match = re.match(r"(\w+) OR (\w+)", parts[0])
-            if not match:
-                return False
-            value = get_value(wires, match.group(1)) | get_value(wires, match.group(2))
-        elif "LSHIFT" in parts[0]:
-            match = re.match(r"(\w+) LSHIFT (\w+)", parts[0])
-            if not match:
-                return False
-            value = get_value(wires, match.group(1)) << get_value(wires, match.group(2))
-        elif "RSHIFT" in parts[0]:
-            match = re.match(r"(\w+) RSHIFT (\w+)", parts[0])
-            if not match:
-                return False
-            value = get_value(wires, match.group(1)) >> get_value(wires, match.group(2))
-        else:
-            # Direct assignment
-            value = get_value(wires, parts[0])
+    operations = {
+        "NOT": (r"NOT (\w+)", apply_not),
+        "AND": (r"(\w+) AND (\w+)", apply_and),
+        "OR": (r"(\w+) OR (\w+)", apply_or),
+        "LSHIFT": (r"(\w+) LSHIFT (\w+)", apply_lshift),
+        "RSHIFT": (r"(\w+) RSHIFT (\w+)", apply_rshift),
+    }
 
-        wires[wire_target] = int(value)
+    try:
+        for op_name, (pattern, op_func) in operations.items():
+            if op_name in parts[0]:
+                match = re.match(pattern, parts[0])
+                if not match:
+                    return False
+                wires[wire_target] = int(op_func(wires, match))
+                return True
+
+        # Direct assignment
+        wires[wire_target] = int(get_value(wires, parts[0]))
         return True
     except (KeyError, AttributeError):
         return False
