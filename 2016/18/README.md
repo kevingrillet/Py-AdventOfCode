@@ -11,7 +11,6 @@ For example, suppose you know the first row (with tiles marked by letters) and w
 ```
 ABCDE
 12345
-
 ```
 
 The type of tile `2` is based on the types of tiles `A`, `B`, and `C`; the type of tile `5` is based on tiles `D`, `E`, and an imaginary "safe" tile. Let's call these three tiles from the previous row the *left*, *center*, and *right* tiles, respectively. Then, a new tile is a *trap* only in one of the following situations:
@@ -36,7 +35,6 @@ After these steps, we now know the next row of tiles in the room: `.^^^^`. Then,
 ..^^.
 .^^^^
 ^^..^
-
 ```
 
 Here's a larger example with ten tiles per row and ten rows:
@@ -52,7 +50,6 @@ Here's a larger example with ten tiles per row and ten rows:
 ^..^^^^.^^
 .^^^..^.^^
 ^^.^^^..^^
-
 ```
 
 In ten rows, this larger example has `38` safe tiles.

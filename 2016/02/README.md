@@ -12,7 +12,6 @@ You can't hold it much longer, so you decide to figure out the code as you walk 
 1 2 3
 4 5 6
 7 8 9
-
 ```
 
 Suppose your instructions are:
@@ -22,7 +21,6 @@ ULL
 RRDDD
 LURDL
 UUUUD
-
 ```
 
 * You start at "5" and move up (to "2"), left (to "1"), and left (you can't, and stay on "1"), so the first button is `1`.
@@ -46,7 +44,6 @@ You finally arrive at the bathroom (it's a several minute walk from the lobby so
 5 6 7 8 9
   A B C
     D
-
 ```
 
 You still start at "5" and stop when you're at an edge, but given the same instructions as above, the outcome is very different:

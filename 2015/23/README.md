@@ -22,7 +22,6 @@ inc a
 jio a, +2
 tpl a
 inc a
-
 ```
 
 What is *the value in register `b`* when the program in your puzzle input is finished executing?

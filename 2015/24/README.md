@@ -27,7 +27,6 @@ Group 1;             Group 2; Group 3
 8 7 5      (QE=280); 11 9;    10 4 3 2 1
 8 5 4 3    (QE=480); 11 9;    10 7 2 1
 7 5 4 3 1  (QE=420); 11 9;    10 8 2
-
 ```
 
 Of these, although `10 9 1` has the smallest quantum entanglement (`90`), the configuration with only two packages, `11 9`, in the passenger compartment gives Santa the most legroom and wins. In this situation, the quantum entanglement for the ideal configuration is therefore `99`. Had there been two configurations with only two packages in the first group, the one with the smaller quantum entanglement would be chosen.
@@ -47,14 +46,12 @@ Balance the sleigh again, but this time, separate the packages into *four groups
 Given the example packages above, this would be some of the new unique first groups, their quantum entanglements, and one way to divide the remaining packages:
 
 ```
-
 11 4    (QE=44); 10 5;   9 3 2 1; 8 7
 10 5    (QE=50); 11 4;   9 3 2 1; 8 7
 9 5 1   (QE=45); 11 4;   10 3 2;  8 7
 9 4 2   (QE=72); 11 3 1; 10 5;    8 7
 9 3 2 1 (QE=54); 11 4;   10 5;    8 7
 8 7     (QE=56); 11 4;   10 5;    9 3 2 1
-
 ```
 
 Of these, there are three arrangements that put the minimum (two) number of packages in the first group: `11 4`, `10 5`, and `8 7`. Of these, `11 4` has the lowest quantum entanglement, and so it is selected.

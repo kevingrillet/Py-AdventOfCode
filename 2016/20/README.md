@@ -10,7 +10,6 @@ For example, suppose only the values `0` through `9` were valid, and that you re
 5-8
 0-2
 4-7
-
 ```
 
 The blacklist specifies ranges of IPs (inclusive of both the start and end value) that are *not* allowed. Then, the only IPs that this firewall allows are `3` and `9`, since those are the only numbers not in any range.

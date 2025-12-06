@@ -1,6 +1,6 @@
 ## --- Day 18: Like a GIF For Your Yard ---
 
-After the [million lights incident](6), the fire code has gotten stricter: now, at most ten thousand lights are allowed. You arrange them in a 100x100 grid.
+After the [million lights incident](<https://adventofcode.com/2015/day/6>), the fire code has gotten stricter: now, at most ten thousand lights are allowed. You arrange them in a 100x100 grid.
 
 Never one to let you down, Santa again mails you instructions on the ideal lighting configuration. With so few lights, he says, you'll have to resort to *animation*.
 
@@ -17,7 +17,6 @@ For example, in a simplified 6x6 grid, the light marked `A` has the neighbors nu
 ..123.
 ..8A4.
 ..765.
-
 ```
 
 The state a light should have next is based on its current state (on or off) plus the *number of neighbors that are on*:
@@ -69,7 +68,6 @@ After 4 steps:
 ..##..
 ......
 ......
-
 ```
 
 After `4` steps, this example has four lights on.
@@ -130,7 +128,6 @@ After 5 steps:
 .##...
 #.#...
 ##...#
-
 ```
 
 After `5` steps, this example now has `17` lights on.

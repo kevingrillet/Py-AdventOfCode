@@ -1,6 +1,6 @@
 ## --- Day 10: Balance Bots ---
 
-You come upon a factory in which many robots are [zooming around](https://www.youtube.com/watch?v=JnkMyfQ5YfY&t=40) handing small microchips to each other.
+You come upon a factory in which many robots are zooming around handing small microchips to each other.
 
 Upon closer examination, you notice that each bot only proceeds when it has *two* microchips, and once it does, it gives each one to a different bot or puts it in a marked "output" bin. Sometimes, bots take microchips from "input" bins, too.
 
@@ -17,7 +17,6 @@ value 3 goes to bot 1
 bot 1 gives low to output 1 and high to bot 0
 bot 0 gives low to output 2 and high to output 0
 value 2 goes to bot 2
-
 ```
 
 * Initially, bot `1` starts with a value-`3` chip, and bot `2` starts with a value-`2` chip and a value-`5` chip.

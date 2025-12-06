@@ -16,7 +16,6 @@ For example, suppose you have a map like the following:
 #.#######.#
 #4.......3#
 ###########
-
 ```
 
 To reach all of the points of interest as quickly as possible, you would have the robot take the following path:
@@ -32,5 +31,5 @@ Given your actual map, and starting from location `0`, what is the *fewest numbe
 
 To begin, [get your puzzle input](24/input).
 
-Answer:  
+Answer:
 

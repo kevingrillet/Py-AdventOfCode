@@ -9,8 +9,8 @@ While it seems chaotic, a nearby morale-boosting poster explains, the layout is 
 * Find `x*x + 3*x + 2*x*y + y + y*y`.
 * Add the office designer's favorite number (your puzzle input).
 * Find the [binary representation](https://en.wikipedia.org/wiki/Binary_number) of that sum; count the *number* of [bits](https://en.wikipedia.org/wiki/Bit) that are `1`.
-	+ If the number of bits that are `1` is *even*, it's an *open space*.
-	+ If the number of bits that are `1` is *odd*, it's a *wall*.
+  + If the number of bits that are `1` is *even*, it's an *open space*.
+  + If the number of bits that are `1` is *odd*, it's a *wall*.
 
 For example, if the office designer's favorite number were `10`, drawing walls as `#` and open spaces as `.`, the corner of the building containing `0,0` would look like this:
 
@@ -23,7 +23,6 @@ For example, if the office designer's favorite number were `10`, drawing walls a
 4 .##..#..#.
 5 ..##....#.
 6 #...##.###
-
 ```
 
 Now, suppose you wanted to reach `7,4`. The shortest route you could take is marked as `O`:
@@ -37,7 +36,6 @@ Now, suppose you wanted to reach `7,4`. The shortest route you could take is mar
 4 .##OO#OO#.
 5 ..##OOO.#.
 6 #...##.###
-
 ```
 
 Thus, reaching `7,4` would take a minimum of `11` steps (starting from your current location, `1,1`).
