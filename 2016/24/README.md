@@ -29,7 +29,5 @@ Since the robot isn't very fast, you need to find it the *shortest route*. This 
 
 Given your actual map, and starting from location `0`, what is the *fewest number of steps* required to visit every non-`0` number marked on the map at least once?
 
-To begin, [get your puzzle input](<https://adventofcode.com/2016/day/24/input>).
-
 Answer:
 

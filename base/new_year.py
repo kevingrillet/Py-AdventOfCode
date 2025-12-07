@@ -79,28 +79,17 @@ def add_day_readme(year: str, d: int) -> None:
 
         # Clean the data!
         data = data.replace(r"article \*[title]{border-bottom:1px dotted #ffff66;}", "")
-        data = re.sub(
-            r"At this point, all that is left is for you to \[admire your Advent calendar]\(/\d+\)\.",
-            "",
-            data,
-        )
-        data = re.sub(
-            r"At this point, you should \[return to your Advent calendar]\(/\d+\) and try another puzzle\.",
-            "",
-            data,
-        )
-        data = re.sub(
-            r"If you still want to see it, you can \[get your puzzle input]\(\d+/input\)\.",
-            "",
-            data,
-        )
-        data = data.replace(r"You can also [Shareon", "")
-        data = data.replace(r"You can [Shareon", "")
-        data = re.sub(r" \[Twitter]\(.*?\)", "", data)
-        data = re.sub(r"\[Twitter]\(.*?\)", "", data)
-        data = re.sub(r"\[Bluesky]\(.*?\)", "", data)
-        data = data.replace("[Mastodon](javascript:void(0);)] this puzzle.", "")
-        data = re.sub(r"\n\s*\n", "\n\n", data)
+        # Remove navigation and input links (entire lines only)
+        data = re.sub(r"^.*\[admire your Advent calendar\].*$", "", data, flags=re.MULTILINE)
+        data = re.sub(r"^.*\[return to your Advent calendar\].*$", "", data, flags=re.MULTILINE)
+        data = re.sub(r"^.*\[get your puzzle input\].*$", "", data, flags=re.MULTILINE)
+        # Remove social media share links (entire lines only)
+        data = re.sub(r"^.*\[Shareon.*$", "", data, flags=re.MULTILINE)
+        data = re.sub(r"^.*\[Twitter\].*$", "", data, flags=re.MULTILINE)
+        data = re.sub(r"^.*\[Bluesky\].*$", "", data, flags=re.MULTILINE)
+        data = re.sub(r"^.*\[Mastodon\].*$", "", data, flags=re.MULTILINE)
+        # Clean up multiple newlines
+        data = re.sub(r"\n\s*\n\s*\n+", "\n\n", data)
 
         # Fix relative day links to absolute URLs
         # Fix DD/input links first (e.g., ](11/input) -> absolute URL)

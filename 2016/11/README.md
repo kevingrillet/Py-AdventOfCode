@@ -129,7 +129,5 @@ In this arrangement, it takes `11` steps to collect all of the objects at the fo
 
 In your situation, what is the *minimum number of steps* required to bring all of the objects to the fourth floor?
 
-To begin, [get your puzzle input](<https://adventofcode.com/2016/day/11/input>).
-
 Answer:
 
